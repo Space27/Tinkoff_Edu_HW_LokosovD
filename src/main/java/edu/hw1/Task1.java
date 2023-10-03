@@ -1,7 +1,8 @@
 package edu.hw1;
 
-public class Task1 {
+public final class Task1 {
     public static int minutesToSeconds(String time) throws NullPointerException {
+        final int secondsInMinute = 60;
         final int minutes;
         final int seconds;
         String[] splitTime = time.split(":");
@@ -17,10 +18,10 @@ public class Task1 {
             return -1;
         }
 
-        if (minutes < 0 || seconds < 0 || seconds >= 60) {
+        if (minutes < 0 || seconds < 0 || seconds >= secondsInMinute) {
             return -1;
         }
 
-        return 60 * minutes + seconds;
+        return secondsInMinute * minutes + seconds;
     }
 }
