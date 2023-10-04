@@ -4,14 +4,15 @@ public final class Task2 {
     private Task2() {
     }
 
-    public static short countDigits(int digitCountingInput) {
+    public static int countDigits(int inputNumber) {
         final int radix = 10;
-        short count = 0;
+        int number = inputNumber;
+        int count = 0;
 
         do {
             ++count;
-            digitCountingInput /= radix;
-        } while (digitCountingInput != 0);
+            number /= radix;
+        } while (number != 0);
         /* ещё можно было бы использовать десятичный логарифм по модулю числа (не учитывая 0) */
 
         return count;

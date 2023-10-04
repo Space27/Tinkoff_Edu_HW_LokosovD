@@ -10,7 +10,7 @@ public class Task2Test {
     void simpleNum() {
         int number = 7;
 
-        short digitCount = Task2.countDigits(number);
+        int digitCount = Task2.countDigits(number);
 
         assertThat(digitCount)
             .isEqualTo(1);
@@ -21,7 +21,7 @@ public class Task2Test {
     void zeroNum() {
         int number = 0;
 
-        short digitCount = Task2.countDigits(number);
+        int digitCount = Task2.countDigits(number);
 
         assertThat(digitCount)
             .isEqualTo(1);
@@ -32,7 +32,7 @@ public class Task2Test {
     void simpleNegNum() {
         int number = -5;
 
-        short digitCount = Task2.countDigits(number);
+        int digitCount = Task2.countDigits(number);
 
         assertThat(digitCount)
             .isEqualTo(1);
@@ -43,7 +43,7 @@ public class Task2Test {
     void limitNum() {
         int number = 10;
 
-        short digitCount = Task2.countDigits(number);
+        int digitCount = Task2.countDigits(number);
 
         assertThat(digitCount)
             .isEqualTo(2);
@@ -54,7 +54,7 @@ public class Task2Test {
     void bigNegLimNum() {
         int number = -100000;
 
-        short digitCount = Task2.countDigits(number);
+        int digitCount = Task2.countDigits(number);
 
         assertThat(digitCount)
             .isEqualTo(6);
@@ -65,7 +65,7 @@ public class Task2Test {
     void bigNum() {
         int number = 15890;
 
-        short digitCount = Task2.countDigits(number);
+        int digitCount = Task2.countDigits(number);
 
         assertThat(digitCount)
             .isEqualTo(5);
@@ -76,7 +76,7 @@ public class Task2Test {
     void bigNegNum() {
         int number = -195401;
 
-        short digitCount = Task2.countDigits(number);
+        int digitCount = Task2.countDigits(number);
 
         assertThat(digitCount)
             .isEqualTo(6);
