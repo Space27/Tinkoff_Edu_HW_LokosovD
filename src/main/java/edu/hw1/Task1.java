@@ -4,7 +4,7 @@ public final class Task1 {
     private Task1() {
     }
 
-    public static int minutesToSeconds(String time) throws NullPointerException {
+    public static int minutesToSeconds(String time) {
         final int secondsInMinute = 60;
         int minutes;
         int seconds;
