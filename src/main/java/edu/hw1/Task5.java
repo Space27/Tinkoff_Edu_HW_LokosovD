@@ -21,9 +21,10 @@ public final class Task5 {
         return true;
     }
 
-    private static int numDescendant(int numAncestor) {
+    private static int numDescendant(int inputNum) {
         /* desc(abc) = concatenate(a, (b + c)) */
         final int radix = 10;
+        int numAncestor = inputNum;
         int resNum = 0;
         int curSum;
         int numAccum = 1;
