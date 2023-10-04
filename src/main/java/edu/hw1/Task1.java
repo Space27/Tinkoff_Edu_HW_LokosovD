@@ -1,13 +1,13 @@
 package edu.hw1;
 
-public class Task1 {
+public final class Task1 {
     private Task1() {
     }
 
     public static int minutesToSeconds(String time) throws NullPointerException {
         final int secondsInMinute = 60;
-        final int minutes;
-        final int seconds;
+        int minutes;
+        int seconds;
         String[] splitTime = time.split(":");
 
         if (splitTime.length != 2 || splitTime[0].length() < 2 || splitTime[1].length() != 2) {
