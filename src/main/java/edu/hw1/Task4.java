@@ -5,6 +5,10 @@ public final class Task4 {
     }
 
     public static String fixString(String brokenStr) {
+        if (brokenStr == null) {
+            return null;
+        }
+
         char[] splitStr = brokenStr.toCharArray();
         char tmpChr;
 

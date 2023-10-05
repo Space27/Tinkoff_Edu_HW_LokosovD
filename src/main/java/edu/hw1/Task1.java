@@ -5,21 +5,15 @@ public final class Task1 {
     }
 
     public static int minutesToSeconds(String time) {
+        if (time == null || !time.matches("\\d{2,}:\\d{2}")) {
+            return -1;
+        }
+
         final int secondsInMinute = 60;
-        int minutes;
-        int seconds;
+
         String[] splitTime = time.split(":");
-
-        if (splitTime.length != 2 || splitTime[0].length() < 2 || splitTime[1].length() != 2) {
-            return -1;
-        }
-
-        try {
-            minutes = Integer.parseInt(splitTime[0]);
-            seconds = Integer.parseInt(splitTime[1]);
-        } catch (NumberFormatException ex) {
-            return -1;
-        }
+        int minutes = Integer.parseInt(splitTime[0]);
+        int seconds = Integer.parseInt(splitTime[1]);
 
         if (minutes < 0 || seconds < 0 || seconds >= secondsInMinute) {
             return -1;

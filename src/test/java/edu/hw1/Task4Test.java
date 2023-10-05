@@ -70,4 +70,15 @@ public class Task4Test {
         assertThat(fixedString)
             .isEqualTo("This is a mixed up string.");
     }
+
+    @Test
+    @DisplayName("Строки нет")
+    void nullStrFix() {
+        String brokenStr = null;
+
+        String fixedString = Task4.fixString(brokenStr);
+
+        assertThat(fixedString)
+            .isEqualTo(null);
+    }
 }

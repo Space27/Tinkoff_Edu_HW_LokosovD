@@ -88,7 +88,7 @@ public class Task1Test {
     @Test
     @DisplayName("Мусор в длине видео")
     void garbageVL() {
-        String videoLen = "01минута:00секунд";
+        String videoLen = "минута01:00секунд";
 
         int convertedVideoLen = Task1.minutesToSeconds(videoLen);
 
@@ -166,6 +166,39 @@ public class Task1Test {
     @DisplayName("Нет разделителя в длине видео")
     void noSepVL() {
         String videoLen = "0101";
+
+        int convertedVideoLen = Task1.minutesToSeconds(videoLen);
+
+        assertThat(convertedVideoLen)
+            .isEqualTo(-1);
+    }
+
+    @Test
+    @DisplayName("Пустая строка")
+    void emptyVL() {
+        String videoLen = "";
+
+        int convertedVideoLen = Task1.minutesToSeconds(videoLen);
+
+        assertThat(convertedVideoLen)
+            .isEqualTo(-1);
+    }
+
+    @Test
+    @DisplayName("Мусорная строка")
+    void garbageStrVL() {
+        String videoLen = "ауцнн5g4554nlknkfj23";
+
+        int convertedVideoLen = Task1.minutesToSeconds(videoLen);
+
+        assertThat(convertedVideoLen)
+            .isEqualTo(-1);
+    }
+
+    @Test
+    @DisplayName("Строки нет")
+    void nullStrVL() {
+        String videoLen = null;
 
         int convertedVideoLen = Task1.minutesToSeconds(videoLen);
 
