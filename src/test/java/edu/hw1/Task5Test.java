@@ -125,4 +125,26 @@ public class Task5Test {
         assertThat(isPalindromeDescendant)
             .isEqualTo(false);
     }
+
+    @Test
+    @DisplayName("Обычное отрицательное число")
+    void negSimpleNum() {
+        int number = -11211230;
+
+        boolean isPalindromeDescendant = Task5.isPalindromeDescendant(number);
+
+        assertThat(isPalindromeDescendant)
+            .isEqualTo(true);
+    }
+
+    @Test
+    @DisplayName("Неправильное отрицательное число")
+    void negWrongNum() {
+        int number = -5426;
+
+        boolean isPalindromeDescendant = Task5.isPalindromeDescendant(number);
+
+        assertThat(isPalindromeDescendant)
+            .isEqualTo(false);
+    }
 }

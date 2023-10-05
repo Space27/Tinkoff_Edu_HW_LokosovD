@@ -29,7 +29,7 @@ public final class Task5 {
         int curSum;
         int numAccum = 1;
 
-        while (numAncestor > 0) {
+        while (numAncestor != 0) {
             curSum = numAncestor % radix + numAncestor / radix % radix;
             resNum += curSum * numAccum;
 
