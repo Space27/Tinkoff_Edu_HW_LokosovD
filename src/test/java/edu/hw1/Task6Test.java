@@ -10,9 +10,9 @@ public class Task6Test {
     void kNum() {
         int number = 6174;
 
-        int digitCount = Task6.countK(number);
+        int stepCount = Task6.countK(number);
 
-        assertThat(digitCount)
+        assertThat(stepCount)
             .isEqualTo(0);
     }
 
@@ -21,9 +21,9 @@ public class Task6Test {
     void simpleNum() {
         int number = 6621;
 
-        int digitCount = Task6.countK(number);
+        int stepCount = Task6.countK(number);
 
-        assertThat(digitCount)
+        assertThat(stepCount)
             .isEqualTo(5);
     }
 
@@ -32,9 +32,9 @@ public class Task6Test {
     void minLimNum() {
         int number = 1000;
 
-        int digitCount = Task6.countK(number);
+        int stepCount = Task6.countK(number);
 
-        assertThat(digitCount)
+        assertThat(stepCount)
             .isEqualTo(0);
     }
 
@@ -43,9 +43,9 @@ public class Task6Test {
     void maxLimNum() {
         int number = 10000;
 
-        int digitCount = Task6.countK(number);
+        int stepCount = Task6.countK(number);
 
-        assertThat(digitCount)
+        assertThat(stepCount)
             .isEqualTo(0);
     }
 
@@ -54,9 +54,9 @@ public class Task6Test {
     void minSameDigitsNum() {
         int number = 1111;
 
-        int digitCount = Task6.countK(number);
+        int stepCount = Task6.countK(number);
 
-        assertThat(digitCount)
+        assertThat(stepCount)
             .isEqualTo(0);
     }
 
@@ -65,9 +65,9 @@ public class Task6Test {
     void maxSameDigitsNum() {
         int number = 9999;
 
-        int digitCount = Task6.countK(number);
+        int stepCount = Task6.countK(number);
 
-        assertThat(digitCount)
+        assertThat(stepCount)
             .isEqualTo(0);
     }
 
@@ -76,9 +76,9 @@ public class Task6Test {
     void threeZeroNum() {
         int number = 2000;
 
-        int digitCount = Task6.countK(number);
+        int stepCount = Task6.countK(number);
 
-        assertThat(digitCount)
+        assertThat(stepCount)
             .isEqualTo(4);
     }
 
@@ -87,9 +87,9 @@ public class Task6Test {
     void twoZeroNum() {
         int number = 2002;
 
-        int digitCount = Task6.countK(number);
+        int stepCount = Task6.countK(number);
 
-        assertThat(digitCount)
+        assertThat(stepCount)
             .isEqualTo(6);
     }
 
@@ -98,9 +98,9 @@ public class Task6Test {
     void seqNum() {
         int number = 1234;
 
-        int digitCount = Task6.countK(number);
+        int stepCount = Task6.countK(number);
 
-        assertThat(digitCount)
+        assertThat(stepCount)
             .isEqualTo(3);
     }
 }
