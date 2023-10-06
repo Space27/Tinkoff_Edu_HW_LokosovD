@@ -22,7 +22,7 @@ public final class Task5 {
     }
 
     private static int numDescendant(int inputNum) {
-        /* desc(abc) = concatenate(a, (b + c)) */
+        /* desc(concatenate(abc)) = concatenate(a, (b + c)) */
         final int radix = 10;
         int numAncestor = inputNum;
         int resNum = 0;

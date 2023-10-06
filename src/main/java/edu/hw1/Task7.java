@@ -12,7 +12,7 @@ public final class Task7 {
         int bNumLen = Integer.toBinaryString(inputNumber).length();
         int number = inputNumber;
         int shift = inputShift % bNumLen;
-        int tmpMask = (int) Math.pow(2, shift) - 1; /* создаётся маска типа 1...1 из shift 1 */
+        int tmpMask = (int) Math.pow(2, shift) - 1; /* создаётся маска типа 0..01..1 из shift 1 */
 
         tmpMask &= inputNumber; /* запоминаются shift последних бит */
         tmpMask <<= bNumLen - shift;
