@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class Task2Test {
+
     @Test
     @DisplayName("Простое число")
     void simpleNum() {

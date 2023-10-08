@@ -1,6 +1,7 @@
 package edu.hw1;
 
 public final class Task8 {
+
     private Task8() {
     }
 

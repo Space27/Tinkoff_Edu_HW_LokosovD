@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class Task5Test {
+
     @Test
     @DisplayName("Число с маленькими цифрами")
     void smallDigitNum() {

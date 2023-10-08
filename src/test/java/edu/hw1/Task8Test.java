@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class Task8Test {
+
     @Test
     @DisplayName("Коней нет")
     void noKnights() {
