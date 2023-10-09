@@ -2,13 +2,16 @@ package edu.hw1;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.ValueSource;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class Task6Test {
 
     @Test
     @DisplayName("Число Капрекара")
-    void kNum() {
+    void countK_ShouldReturnZeroForKConst() {
         int number = 6174;
 
         int stepCount = Task6.countK(number);
@@ -17,91 +20,33 @@ public class Task6Test {
             .isEqualTo(0);
     }
 
-    @Test
-    @DisplayName("Обычное число")
-    void simpleNum() {
-        int number = 6621;
-
+    @ParameterizedTest
+    @ValueSource(ints = {1000, 10000})
+    @DisplayName("Предельные числа")
+    void countK_ShouldReturnNotCountLimitNums(int number) {
         int stepCount = Task6.countK(number);
 
         assertThat(stepCount)
-            .isEqualTo(5);
+            .isEqualTo(-1);
     }
 
-    @Test
-    @DisplayName("Минимальный предел")
-    void minLimNum() {
-        int number = 1000;
-
+    @ParameterizedTest
+    @ValueSource(ints = {1111, 9999, 5555})
+    @DisplayName("Числа с одинаковыми цифрами")
+    void countK_ShouldReturnNotCountNumsWithSameDigits(int number) {
         int stepCount = Task6.countK(number);
 
         assertThat(stepCount)
-            .isEqualTo(0);
+            .isEqualTo(-1);
     }
 
-    @Test
-    @DisplayName("Максимальный предел")
-    void maxLimNum() {
-        int number = 10000;
-
+    @ParameterizedTest
+    @CsvSource({"6621, 5", "2000, 4", "2002, 6", "1234, 3"})
+    @DisplayName("Корректные числа")
+    void countK_ShouldReturnNotCountKIfNumIsValid(int number, int expected) {
         int stepCount = Task6.countK(number);
 
         assertThat(stepCount)
-            .isEqualTo(0);
-    }
-
-    @Test
-    @DisplayName("Минимальное число с одинаковыми цифрами")
-    void minSameDigitsNum() {
-        int number = 1111;
-
-        int stepCount = Task6.countK(number);
-
-        assertThat(stepCount)
-            .isEqualTo(0);
-    }
-
-    @Test
-    @DisplayName("Максимальное число с одинаковыми цифрами")
-    void maxSameDigitsNum() {
-        int number = 9999;
-
-        int stepCount = Task6.countK(number);
-
-        assertThat(stepCount)
-            .isEqualTo(0);
-    }
-
-    @Test
-    @DisplayName("Число с 3 нулями")
-    void threeZeroNum() {
-        int number = 2000;
-
-        int stepCount = Task6.countK(number);
-
-        assertThat(stepCount)
-            .isEqualTo(4);
-    }
-
-    @Test
-    @DisplayName("Число с 2 нулями посередине")
-    void twoZeroNum() {
-        int number = 2002;
-
-        int stepCount = Task6.countK(number);
-
-        assertThat(stepCount)
-            .isEqualTo(6);
-    }
-
-    @Test
-    @DisplayName("Число - последовательность")
-    void seqNum() {
-        int number = 1234;
-
-        int stepCount = Task6.countK(number);
-
-        assertThat(stepCount)
-            .isEqualTo(3);
+            .isEqualTo(expected);
     }
 }

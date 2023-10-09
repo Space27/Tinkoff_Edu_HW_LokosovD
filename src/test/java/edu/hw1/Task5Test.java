@@ -2,150 +2,110 @@ package edu.hw1;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class Task5Test {
 
-    @Test
-    @DisplayName("Число с маленькими цифрами")
-    void smallDigitNum() {
-        int number = 11211230;
-
+    @ParameterizedTest
+    @ValueSource(ints = {123, 12565})
+    @DisplayName("Не предки палиндромов нечетной длины")
+    void isPalindromeDescendant_ShouldReturnTrueForNotPalindromeDescendantOddLen(int number) {
         boolean isPalindromeDescendant = Task5.isPalindromeDescendant(number);
 
         assertThat(isPalindromeDescendant)
-            .isEqualTo(true);
+            .isFalse();
+    }
+
+    @ParameterizedTest
+    @ValueSource(ints = {-5426, 5426, 98})
+    @DisplayName("Не предки палиндромов четной длины")
+    void isPalindromeDescendant_ShouldReturnTrueForNotPalindromeDescendantEvenLen(int number) {
+        boolean isPalindromeDescendant = Task5.isPalindromeDescendant(number);
+
+        assertThat(isPalindromeDescendant)
+            .isFalse();
+    }
+
+    @ParameterizedTest
+    @ValueSource(ints = {321, 63315, 1338897})
+    @DisplayName("Предки палиндромов с нечетной длиной")
+    void isPalindromeDescendant_ShouldReturnTrueForPalindromeDescendantOddLen(int number) {
+        boolean isPalindromeDescendant = Task5.isPalindromeDescendant(number);
+
+        assertThat(isPalindromeDescendant)
+            .isTrue();
+    }
+
+    @ParameterizedTest
+    @ValueSource(ints = {5326, 11211230, 979710, -11211230, 12566})
+    @DisplayName("Предки палиндромов с четной длиной")
+    void isPalindromeDescendant_ShouldReturnTrueForPalindromeDescendantEvenLen(int number) {
+        boolean isPalindromeDescendant = Task5.isPalindromeDescendant(number);
+
+        assertThat(isPalindromeDescendant)
+            .isTrue();
     }
 
     @Test
-    @DisplayName("Число с большими цифрами")
-    void bigDigitNum() {
-        int number = 979710; /* 979710 -> 16161 */
+    @DisplayName("Ноль")
+    void isPalindromeDescendant_ShouldReturnFalseForZero() {
+        int number = 0;
 
         boolean isPalindromeDescendant = Task5.isPalindromeDescendant(number);
 
         assertThat(isPalindromeDescendant)
-            .isEqualTo(true);
+            .isFalse();
     }
 
-    @Test
-    @DisplayName("Маленькое число")
-    void smallNum() {
-        int number = 7;
-
+    @ParameterizedTest
+    @ValueSource(ints = {11, 1221, 1111, 123321})
+    @DisplayName("Палиндромы четной длины")
+    void isPalindromeDescendant_ShouldReturnTrueForEvenLenPalindromes(int number) {
         boolean isPalindromeDescendant = Task5.isPalindromeDescendant(number);
 
         assertThat(isPalindromeDescendant)
-            .isEqualTo(false);
+            .isTrue();
     }
 
-    @Test
-    @DisplayName("Маленький палиндром")
-    void smallPalindromeNum() {
-        int number = 11;
-
+    @ParameterizedTest
+    @ValueSource(ints = {111, 121, 1234554321, 12321})
+    @DisplayName("Палиндромы нечетной длины")
+    void isPalindromeDescendant_ShouldReturnTrueForOddLenPalindromes(int number) {
         boolean isPalindromeDescendant = Task5.isPalindromeDescendant(number);
 
         assertThat(isPalindromeDescendant)
-            .isEqualTo(true);
+            .isTrue();
     }
 
-    @Test
-    @DisplayName("Маленький не-палиндром")
-    void smallNotPalindromeNum() {
-        int number = 12;
-
+    @ParameterizedTest
+    @ValueSource(ints = {112, 2111, 123, 12322})
+    @DisplayName("Не палиндромы нечетной длины")
+    void isPalindromeDescendant_ShouldReturnFalseForOddLenNotPalindromes(int number) {
         boolean isPalindromeDescendant = Task5.isPalindromeDescendant(number);
 
         assertThat(isPalindromeDescendant)
-            .isEqualTo(false);
+            .isFalse();
     }
 
-    @Test
-    @DisplayName("Легкий палиндром")
-    void simplePalindromeNum() {
-        int number = 12321;
-
+    @ParameterizedTest
+    @ValueSource(ints = {12, 1231, 2223})
+    @DisplayName("Не палиндромы четной длины")
+    void isPalindromeDescendant_ShouldReturnFalseForEvenLenNotPalindromes(int number) {
         boolean isPalindromeDescendant = Task5.isPalindromeDescendant(number);
 
         assertThat(isPalindromeDescendant)
-            .isEqualTo(true);
+            .isFalse();
     }
 
-    @Test
-    @DisplayName("Большой палиндром нечетной длины")
-    void bigOddPalindromeNum() {
-        int number = 1234554321;
-
+    @ParameterizedTest
+    @ValueSource(ints = {1, 3, 7, 9})
+    @DisplayName("Не палиндромы четной длины")
+    void isPalindromeDescendant_ShouldReturnFalseForOneDigitNums(int number) {
         boolean isPalindromeDescendant = Task5.isPalindromeDescendant(number);
 
         assertThat(isPalindromeDescendant)
-            .isEqualTo(true);
-    }
-
-    @Test
-    @DisplayName("Трехзначное число")
-    void threeDigitNum() {
-        int number = 321;
-
-        boolean isPalindromeDescendant = Task5.isPalindromeDescendant(number);
-
-        assertThat(isPalindromeDescendant)
-            .isEqualTo(true);
-    }
-
-    @Test
-    @DisplayName("Трехзначное число - не предок палиндрома")
-    void threeDigitNotNum() {
-        int number = 123;
-
-        boolean isPalindromeDescendant = Task5.isPalindromeDescendant(number);
-
-        assertThat(isPalindromeDescendant)
-            .isEqualTo(false);
-    }
-
-    @Test
-    @DisplayName("Четырехзначное число")
-    void fourDigitNum() {
-        int number = 5326;
-
-        boolean isPalindromeDescendant = Task5.isPalindromeDescendant(number);
-
-        assertThat(isPalindromeDescendant)
-            .isEqualTo(true);
-    }
-
-    @Test
-    @DisplayName("Четырехзначное число - не предок палиндрома")
-    void fourDigitNotNum() {
-        int number = 5426;
-
-        boolean isPalindromeDescendant = Task5.isPalindromeDescendant(number);
-
-        assertThat(isPalindromeDescendant)
-            .isEqualTo(false);
-    }
-
-    @Test
-    @DisplayName("Обычное отрицательное число")
-    void negSimpleNum() {
-        int number = -11211230;
-
-        boolean isPalindromeDescendant = Task5.isPalindromeDescendant(number);
-
-        assertThat(isPalindromeDescendant)
-            .isEqualTo(true);
-    }
-
-    @Test
-    @DisplayName("Неправильное отрицательное число")
-    void negWrongNum() {
-        int number = -5426;
-
-        boolean isPalindromeDescendant = Task5.isPalindromeDescendant(number);
-
-        assertThat(isPalindromeDescendant)
-            .isEqualTo(false);
+            .isFalse();
     }
 }

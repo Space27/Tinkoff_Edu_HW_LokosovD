@@ -14,7 +14,6 @@ public final class Task2 {
             ++count;
             number /= radix;
         } while (number != 0);
-        /* ещё можно было бы использовать десятичный логарифм по модулю числа (не учитывая 0) */
 
         return count;
     }

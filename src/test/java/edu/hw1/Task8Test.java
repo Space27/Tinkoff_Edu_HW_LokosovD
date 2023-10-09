@@ -8,7 +8,7 @@ public class Task8Test {
 
     @Test
     @DisplayName("Коней нет")
-    void noKnights() {
+    void knightBoardCapture_ShouldReturnFalseForNoKnights() {
         int[][] chessBoard = {
             {0, 0, 0, 0, 0, 0, 0, 0},
             {0, 0, 0, 0, 0, 0, 0, 0},
@@ -23,12 +23,32 @@ public class Task8Test {
         boolean isKnightJumpsKnight = Task8.knightBoardCapture(chessBoard);
 
         assertThat(isKnightJumpsKnight)
-            .isEqualTo(true);
+            .isTrue();
+    }
+
+    @Test
+    @DisplayName("Все кони")
+    void knightBoardCapture_ShouldReturnTrueForAllKnights() {
+        int[][] chessBoard = {
+            {1, 1, 1, 1, 1, 1, 1, 1},
+            {1, 1, 1, 1, 1, 1, 1, 1},
+            {1, 1, 1, 1, 1, 1, 1, 1},
+            {1, 1, 1, 1, 1, 1, 1, 1},
+            {1, 1, 1, 1, 1, 1, 1, 1},
+            {1, 1, 1, 1, 1, 1, 1, 1},
+            {1, 1, 1, 1, 1, 1, 1, 1},
+            {1, 1, 1, 1, 1, 1, 1, 1}
+        };
+
+        boolean isKnightJumpsKnight = Task8.knightBoardCapture(chessBoard);
+
+        assertThat(isKnightJumpsKnight)
+            .isFalse();
     }
 
     @Test
     @DisplayName("Один конь")
-    void oneKnights() {
+    void knightBoardCapture_ShouldReturnFalseForOneKnight() {
         int[][] chessBoard = {
             {0, 0, 0, 0, 0, 0, 0, 0},
             {0, 0, 1, 0, 0, 0, 0, 0},
@@ -43,12 +63,12 @@ public class Task8Test {
         boolean isKnightJumpsKnight = Task8.knightBoardCapture(chessBoard);
 
         assertThat(isKnightJumpsKnight)
-            .isEqualTo(true);
+            .isTrue();
     }
 
     @Test
     @DisplayName("Два нейтральных коня")
-    void twoNeutralKnights() {
+    void knightBoardCapture_ShouldReturnFalseForTwoNeutralKnights() {
         int[][] chessBoard = {
             {0, 0, 0, 0, 0, 0, 0, 0},
             {0, 0, 1, 0, 0, 0, 0, 0},
@@ -63,12 +83,12 @@ public class Task8Test {
         boolean isKnightJumpsKnight = Task8.knightBoardCapture(chessBoard);
 
         assertThat(isKnightJumpsKnight)
-            .isEqualTo(true);
+            .isTrue();
     }
 
     @Test
     @DisplayName("Два бьющих коня")
-    void twoBeatingKnights() {
+    void knightBoardCapture_ShouldReturnTrueForTwoBeatingKnights() {
         int[][] chessBoard = {
             {0, 0, 0, 0, 0, 0, 0, 0},
             {0, 0, 1, 0, 0, 0, 0, 0},
@@ -83,12 +103,12 @@ public class Task8Test {
         boolean isKnightJumpsKnight = Task8.knightBoardCapture(chessBoard);
 
         assertThat(isKnightJumpsKnight)
-            .isEqualTo(false);
+            .isFalse();
     }
 
     @Test
     @DisplayName("Кони в шахматном порядке")
-    void chessOrderKnights() {
+    void knightBoardCapture_ShouldCaptureKnightIfTheyAreInChessOrder() {
         int[][] chessBoard = {
             {1, 0, 1, 0, 1, 0, 1, 0},
             {0, 1, 0, 1, 0, 1, 0, 1},
@@ -103,12 +123,12 @@ public class Task8Test {
         boolean isKnightJumpsKnight = Task8.knightBoardCapture(chessBoard);
 
         assertThat(isKnightJumpsKnight)
-            .isEqualTo(true);
+            .isTrue();
     }
 
     @Test
     @DisplayName("Сложный порядок коней")
-    void hardOrderKnights() {
+    void knightBoardCapture_ShouldCaptureKnight() {
         int[][] chessBoard = {
             {1, 0, 1, 0, 1, 0, 1, 0},
             {0, 1, 0, 1, 0, 1, 0, 1},
@@ -123,12 +143,12 @@ public class Task8Test {
         boolean isKnightJumpsKnight = Task8.knightBoardCapture(chessBoard);
 
         assertThat(isKnightJumpsKnight)
-            .isEqualTo(false);
+            .isFalse();
     }
 
     @Test
     @DisplayName("Кони на границах")
-    void borderKnights() {
+    void knightBoardCapture_ShouldCaptureKnightIfItOnBorder() {
         int[][] chessBoard = {
             {0, 0, 0, 0, 0, 0, 0, 0},
             {0, 0, 0, 0, 0, 0, 0, 0},
@@ -143,12 +163,12 @@ public class Task8Test {
         boolean isKnightJumpsKnight = Task8.knightBoardCapture(chessBoard);
 
         assertThat(isKnightJumpsKnight)
-            .isEqualTo(false);
+            .isFalse();
     }
 
     @Test
     @DisplayName("Конь в углу")
-    void cornerKnights() {
+    void knightBoardCapture_ShouldCaptureKnightIfItOnCorner() {
         int[][] chessBoard = {
             {0, 0, 0, 0, 0, 0, 0, 0},
             {0, 0, 0, 0, 0, 0, 0, 0},
@@ -163,6 +183,6 @@ public class Task8Test {
         boolean isKnightJumpsKnight = Task8.knightBoardCapture(chessBoard);
 
         assertThat(isKnightJumpsKnight)
-            .isEqualTo(false);
+            .isFalse();
     }
 }

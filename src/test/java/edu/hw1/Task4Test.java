@@ -1,85 +1,51 @@
 package edu.hw1;
 
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.EmptySource;
+import org.junit.jupiter.params.provider.NullSource;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class Task4Test {
 
-    @Test
-    @DisplayName("Числовая последовательность")
-    void digitSeqStrFix() {
-        String brokenStr = "214365";
-
-        String fixedString = Task4.fixString(brokenStr);
-
-        assertThat(fixedString)
-            .isEqualTo("123456");
-    }
-
-    @Test
-    @DisplayName("Нечетная длина строки")
-    void oddLenStrFix() {
-        String brokenStr = "migae";
-
-        String fixedString = Task4.fixString(brokenStr);
+    @ParameterizedTest
+    @CsvSource({"ba, ab", "ab, ba", "214365, 123456", "hTsii  s aimex dpus rtni.g, This is a mixed up string."})
+    @DisplayName("Строка с четной длиной")
+    void fixString_ShouldFixEvenLenStr(String input, String expected) {
+        String fixedString = Task4.fixString(input);
 
         assertThat(fixedString)
-            .isEqualTo("image");
+            .isEqualTo(expected);
     }
 
-    @Test
+    @ParameterizedTest
+    @CsvSource({"a, a", "ehllo, hello", "hello, ehllo", "migae, image", "123, 213"})
+    @DisplayName("Строка с нечетной длиной")
+    void fixString_ShouldFixOddLenStr(String input, String expected) {
+        String fixedString = Task4.fixString(input);
+
+        assertThat(fixedString)
+            .isEqualTo(expected);
+    }
+
+    @ParameterizedTest
+    @EmptySource
     @DisplayName("Пустая строка")
-    void emptyStrFix() {
-        String brokenStr = "";
-
-        String fixedString = Task4.fixString(brokenStr);
+    void fixString_ShouldFixEmptyStr(String input) {
+        String fixedString = Task4.fixString(input);
 
         assertThat(fixedString)
-            .isEqualTo("");
+            .isEmpty();
     }
 
-    @Test
-    @DisplayName("Односимвольная строка")
-    void oneCharStrFix() {
-        String brokenStr = "a";
-
-        String fixedString = Task4.fixString(brokenStr);
-
-        assertThat(fixedString)
-            .isEqualTo("a");
-    }
-
-    @Test
-    @DisplayName("Двухсимвольная строка")
-    void twoCharStrFix() {
-        String brokenStr = "ba";
-
-        String fixedString = Task4.fixString(brokenStr);
+    @ParameterizedTest
+    @NullSource
+    @DisplayName("Null строка")
+    void fixString_ShouldNotFixNull(String input) {
+        String fixedString = Task4.fixString(input);
 
         assertThat(fixedString)
-            .isEqualTo("ab");
-    }
-
-    @Test
-    @DisplayName("Длинная строка")
-    void longStrFix() {
-        String brokenStr = "hTsii  s aimex dpus rtni.g";
-
-        String fixedString = Task4.fixString(brokenStr);
-
-        assertThat(fixedString)
-            .isEqualTo("This is a mixed up string.");
-    }
-
-    @Test
-    @DisplayName("Строки нет")
-    void nullStrFix() {
-        String brokenStr = null;
-
-        String fixedString = Task4.fixString(brokenStr);
-
-        assertThat(fixedString)
-            .isEqualTo(null);
+            .isNull();
     }
 }

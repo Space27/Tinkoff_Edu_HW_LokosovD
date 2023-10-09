@@ -4,6 +4,8 @@ import java.util.Arrays;
 
 public final class Task6 {
 
+    static final int K_CONST = 6174;
+
     private Task6() {
     }
 
@@ -41,13 +43,15 @@ public final class Task6 {
     }
 
     public static int countK(int number) {
-        final int kConst = 6174;
         final int min = 1000;
         final int max = 10000;
         final int divisorOfNumWithSameDigits = 1111;
 
-        if (number == kConst || number <= min || number >= max || number % divisorOfNumWithSameDigits == 0) {
+        if (number == K_CONST) {
             return 0;
+        }
+        if (number <= min || number >= max || number % divisorOfNumWithSameDigits == 0) {
+            return -1;
         }
 
         int[] digitArr = createDigitArr(number);

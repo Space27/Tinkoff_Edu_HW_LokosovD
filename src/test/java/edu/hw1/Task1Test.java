@@ -1,207 +1,89 @@
 package edu.hw1;
 
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.NullAndEmptySource;
+import org.junit.jupiter.params.provider.ValueSource;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class Task1Test {
 
-    @Test
-    @DisplayName("Простая длина видео")
-    void simpleVL() {
-        // given
-        String videoLen = "01:00";
+    @ParameterizedTest
+    @CsvSource({"1378:59, 82739", "12:43, 763", "10:00, 600", "00:59, 59"})
+    @DisplayName("Строка корректная")
+    void minutesToSeconds_ShouldConvertIfDataIsValid(String input, int expected) {
+        int convertedVideoLen = Task1.minutesToSeconds(input);
 
-        // when
-        int convertedVideoLen = Task1.minutesToSeconds(videoLen);
-
-        // then
         assertThat(convertedVideoLen)
-            .isEqualTo(60);
+            .isEqualTo(expected);
     }
 
-    @Test
-    @DisplayName("Нулевая длина видео")
-    void zeroVL() {
-        String videoLen = "00:00";
-
-        int convertedVideoLen = Task1.minutesToSeconds(videoLen);
+    @ParameterizedTest
+    @ValueSource(strings = {"00:00", "000:00"})
+    @DisplayName("Нулевая длина")
+    void minutesToSeconds_ShouldReturnZeroIfVideoLenIsZero(String input) {
+        int convertedVideoLen = Task1.minutesToSeconds(input);
 
         assertThat(convertedVideoLen)
             .isEqualTo(0);
     }
 
-    @Test
-    @DisplayName("Обычная длина видео")
-    void commonVL() {
-        String videoLen = "12:43";
-
-        int convertedVideoLen = Task1.minutesToSeconds(videoLen);
-
-        assertThat(convertedVideoLen)
-            .isEqualTo(12 * 60 + 43);
-    }
-
-    @Test
-    @DisplayName("Большая длина видео")
-    void bigVL() {
-        String videoLen = "1378:59";
-
-        int convertedVideoLen = Task1.minutesToSeconds(videoLen);
-
-        assertThat(convertedVideoLen)
-            .isEqualTo(1378 * 60 + 59);
-    }
-
-    @Test
-    @DisplayName("Слишком много секунд")
-    void tooManySecVL() {
-        String videoLen = "00:60";
-
-        int convertedVideoLen = Task1.minutesToSeconds(videoLen);
+    @ParameterizedTest
+    @ValueSource(strings = {"00:60", "12:61"})
+    @DisplayName("Число минут превышает лимит")
+    void minutesToSeconds_ShouldNotConvertIfSecondsAreHigherThanLimit(String input) {
+        int convertedVideoLen = Task1.minutesToSeconds(input);
 
         assertThat(convertedVideoLen)
             .isEqualTo(-1);
     }
 
-    @Test
-    @DisplayName("Отрицательные секунды в длине видео")
-    void negSecVL() {
-        String videoLen = "00:-01";
-
-        int convertedVideoLen = Task1.minutesToSeconds(videoLen);
-
-        assertThat(convertedVideoLen)
-            .isEqualTo(-1);
-    }
-
-    @Test
-    @DisplayName("Отрицательные минуты в длине видео")
-    void negMinVL() {
-        String videoLen = "-01:00";
-
-        int convertedVideoLen = Task1.minutesToSeconds(videoLen);
+    @ParameterizedTest
+    @ValueSource(strings = {"01:01:01", "00:000"})
+    @DisplayName("В строке лишние данные")
+    void minutesToSeconds_ShouldNotConvertIfTooManyData(String input) {
+        int convertedVideoLen = Task1.minutesToSeconds(input);
 
         assertThat(convertedVideoLen)
             .isEqualTo(-1);
     }
 
-    @Test
-    @DisplayName("Мусор в длине видео")
-    void garbageVL() {
-        String videoLen = "минута01:00секунд";
-
-        int convertedVideoLen = Task1.minutesToSeconds(videoLen);
-
-        assertThat(convertedVideoLen)
-            .isEqualTo(-1);
-    }
-
-    @Test
-    @DisplayName("Некорректная длина секунд в длине видео (меньше нужного)")
-    void incorrectSecLenLowVL() {
-        String videoLen = "00:0";
-
-        int convertedVideoLen = Task1.minutesToSeconds(videoLen);
+    @ParameterizedTest
+    @ValueSource(strings = {"0101", "00:", ":00", "0:00", "00:0"})
+    @DisplayName("Недостаточно данных в строке")
+    void minutesToSeconds_ShouldNotConvertIfNotEnoughData(String input) {
+        int convertedVideoLen = Task1.minutesToSeconds(input);
 
         assertThat(convertedVideoLen)
             .isEqualTo(-1);
     }
 
-    @Test
-    @DisplayName("Некорректная длина секунд в длине видео (больше нужного)")
-    void incorrectSecLenHighVL() {
-        String videoLen = "00:000";
-
-        int convertedVideoLen = Task1.minutesToSeconds(videoLen);
-
-        assertThat(convertedVideoLen)
-            .isEqualTo(-1);
-    }
-
-    @Test
-    @DisplayName("Некорректная длина секунд в длине видео (меньше нужного)")
-    void incorrectMinLenVL() {
-        String videoLen = "0:00";
-
-        int convertedVideoLen = Task1.minutesToSeconds(videoLen);
+    @ParameterizedTest
+    @ValueSource(strings = {"-01:00", "00:-01", "-03:-30"})
+    @DisplayName("Отрицательные минуты или секунды")
+    void minutesToSeconds_ShouldNotConvertNegativeNum(String input) {
+        int convertedVideoLen = Task1.minutesToSeconds(input);
 
         assertThat(convertedVideoLen)
             .isEqualTo(-1);
     }
 
-    @Test
-    @DisplayName("Нет минут в длине видео")
-    void noMinVL() {
-        String videoLen = ":00";
-
-        int convertedVideoLen = Task1.minutesToSeconds(videoLen);
-
-        assertThat(convertedVideoLen)
-            .isEqualTo(-1);
-    }
-
-    @Test
-    @DisplayName("Нет секунд в длине видео")
-    void noSecVL() {
-        String videoLen = "00:";
-
-        int convertedVideoLen = Task1.minutesToSeconds(videoLen);
+    @ParameterizedTest
+    @ValueSource(strings = {"ауцнн5g4554nlknkfj23", "минута01:00секунд"})
+    @DisplayName("Мусор в строке")
+    void minutesToSeconds_ShouldNotConvertIfGarbageInStr(String input) {
+        int convertedVideoLen = Task1.minutesToSeconds(input);
 
         assertThat(convertedVideoLen)
             .isEqualTo(-1);
     }
 
-    @Test
-    @DisplayName("Лишние данные в длине видео")
-    void extraDataVL() {
-        String videoLen = "01:01:01";
-
-        int convertedVideoLen = Task1.minutesToSeconds(videoLen);
-
-        assertThat(convertedVideoLen)
-            .isEqualTo(-1);
-    }
-
-    @Test
-    @DisplayName("Нет разделителя в длине видео")
-    void noSepVL() {
-        String videoLen = "0101";
-
-        int convertedVideoLen = Task1.minutesToSeconds(videoLen);
-
-        assertThat(convertedVideoLen)
-            .isEqualTo(-1);
-    }
-
-    @Test
-    @DisplayName("Пустая строка")
-    void emptyVL() {
-        String videoLen = "";
-
-        int convertedVideoLen = Task1.minutesToSeconds(videoLen);
-
-        assertThat(convertedVideoLen)
-            .isEqualTo(-1);
-    }
-
-    @Test
-    @DisplayName("Мусорная строка")
-    void garbageStrVL() {
-        String videoLen = "ауцнн5g4554nlknkfj23";
-
-        int convertedVideoLen = Task1.minutesToSeconds(videoLen);
-
-        assertThat(convertedVideoLen)
-            .isEqualTo(-1);
-    }
-
-    @Test
-    @DisplayName("Строки нет")
-    void nullStrVL() {
-        String videoLen = null;
-
-        int convertedVideoLen = Task1.minutesToSeconds(videoLen);
+    @ParameterizedTest
+    @NullAndEmptySource
+    @DisplayName("Пустая или null строка")
+    void minutesToSeconds_ShouldNotConvertNullAndEmptyStr(String input) {
+        int convertedVideoLen = Task1.minutesToSeconds(input);
 
         assertThat(convertedVideoLen)
             .isEqualTo(-1);

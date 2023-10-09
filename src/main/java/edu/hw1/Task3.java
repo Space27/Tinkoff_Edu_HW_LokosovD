@@ -8,7 +8,7 @@ public final class Task3 {
     private static int arrMin(int[] arr) {
         int min = arr[0];
 
-        for (var i : arr) {
+        for (int i : arr) {
             if (i < min) {
                 min = i;
             }
@@ -30,7 +30,6 @@ public final class Task3 {
     }
 
     public static boolean isNestable(int[] firstArr, int[] secondArr) {
-        /* вместо написанных методов можно было использовать встроенные методы класса Arrays */
         return arrMin(firstArr) > arrMin(secondArr) && arrMax(firstArr) < arrMax(secondArr);
     }
 }
