@@ -2,9 +2,9 @@ package edu.hw2.Task2;
 
 public class Square extends Rectangle {
 
-    final private Rectangle likeSquare = new Rectangle();
+    private final Rectangle likeSquare = new Rectangle();
 
-    private boolean isChanged = false;
+    private boolean isChanged;
 
     @Override
     public Rectangle setWidth(int width) {
