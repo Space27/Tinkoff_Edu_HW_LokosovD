@@ -155,7 +155,7 @@ public class Task5Test {
             ),
             Arguments.of(
                 new String[] {null, "", null},
-                new String[] {null, "", null}
+                new String[] {null, null, ""}
             )
         );
     }

@@ -19,8 +19,9 @@ public final class Task5 {
         contactsList.sort((s1, s2) -> {
             String s1Cmp = s1;
             String s2Cmp = s2;
+
             if (s1Cmp == null) {
-                s1Cmp = "";
+                return order == Order.ASC ? -1 : 1;
             } else if (s1Cmp.split(" ").length == 2) {
                 s1Cmp = s1Cmp.split(" ")[1];
             } else {
@@ -28,7 +29,7 @@ public final class Task5 {
             }
 
             if (s2Cmp == null) {
-                s2Cmp = "";
+                return order == Order.ASC ? 1 : -1;
             } else if (s2Cmp.split(" ").length == 2) {
                 s2Cmp = s2Cmp.split(" ")[1];
             } else {
