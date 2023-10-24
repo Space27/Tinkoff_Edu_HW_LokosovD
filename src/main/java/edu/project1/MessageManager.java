@@ -26,6 +26,6 @@ public final class MessageManager {
     }
 
     public static String notGuessed(int attempts, int maxAttempts) {
-        return "Missed, mistake " + attempts + " out of " + maxAttempts + ".";
+        return String.format("Missed, mistake %d out of %d.", attempts, maxAttempts);
     }
 }

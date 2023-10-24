@@ -1,13 +1,12 @@
 package edu.project1;
 
 import java.util.Scanner;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class GameSession {
 
     private final Scanner scanner = new Scanner(System.in);
-    private final Logger logger = LogManager.getLogger();
     private final char quitChar = '0';
     private final WordHandler wordHandler;
     private final int maxAttempts = 7;
@@ -25,7 +24,7 @@ public class GameSession {
         String input = scanner.nextLine();
 
         while (input.length() > 1 || !Character.isAlphabetic(input.charAt(0)) && input.charAt(0) != quitChar) {
-            logger.info("Enter one letter");
+            log.info("Enter one letter");
             input = scanner.nextLine();
         }
 
