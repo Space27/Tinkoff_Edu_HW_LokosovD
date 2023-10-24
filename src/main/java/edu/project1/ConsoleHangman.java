@@ -9,7 +9,7 @@ public class ConsoleHangman {
 
     public void run(String word) throws IllegalArgumentException {
         if (word.length() < minWordLen) {
-            throw new IllegalArgumentException("The word must be at least" + minWordLen + "letters");
+            throw new IllegalArgumentException(String.format("The word must be at least %d letters", minWordLen));
         }
         WordHandler wordHandler = new WordHandler(word);
         GameSession gameSession = new GameSession(wordHandler);
