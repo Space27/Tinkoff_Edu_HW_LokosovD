@@ -13,10 +13,6 @@ public class Cell {
         this.type = Type.WALL;
     }
 
-    public Cell(Type type) {
-        this.type = Type.WALL;
-    }
-
     public Type getType() {
         return type;
     }

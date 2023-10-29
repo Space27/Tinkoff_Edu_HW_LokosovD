@@ -1,4 +1,4 @@
 package edu.project2;
 
-public record Coordinate(int row, int col) {
+public record Coordinate(int col, int row) {
 }

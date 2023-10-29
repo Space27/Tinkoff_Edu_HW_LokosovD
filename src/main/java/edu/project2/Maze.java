@@ -9,10 +9,44 @@ public final class Maze {
     public Maze(int height, int width) {
         this.height = height;
         this.width = width;
-        this.grid = new Cell[this.height][this.width];
+        this.grid = new Cell[height][width];
+
+        for (int i = 0; i < height; ++i) {
+            for (int j = 0; j < width; ++j) {
+                grid[i][j] = new Cell();
+            }
+        }
     }
 
     public void setCellType(int col, int row, Cell.Type type) {
-        grid[col][row].setType(type);
+        grid[row][col].setType(type);
+    }
+
+    public void setCellType(Coordinate coordinate, Cell.Type type) {
+        grid[coordinate.row()][coordinate.col()].setType(type);
+    }
+
+    public Cell.Type getCellType(int col, int row) {
+        return grid[row][col].getType();
+    }
+
+    public Cell.Type getCellType(Coordinate coordinate) {
+        return grid[coordinate.row()][coordinate.col()].getType();
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public boolean isIn(Coordinate coordinate) {
+        return coordinate.col() > 0 && coordinate.row() > 0 && coordinate.col() < width && coordinate.row() < width;
+    }
+
+    public boolean isIn(int col, int row) {
+        return col > 0 && row > 0 && col < width && row < width;
     }
 }
