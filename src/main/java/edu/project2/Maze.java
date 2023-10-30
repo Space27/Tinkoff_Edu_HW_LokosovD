@@ -43,10 +43,10 @@ public final class Maze {
     }
 
     public boolean isIn(Coordinate coordinate) {
-        return coordinate.col() > 0 && coordinate.row() > 0 && coordinate.col() < width && coordinate.row() < width;
+        return coordinate.col() > 0 && coordinate.row() > 0 && coordinate.col() < width && coordinate.row() < height;
     }
 
     public boolean isIn(int col, int row) {
-        return col > 0 && row > 0 && col < width && row < width;
+        return col > 0 && row > 0 && col < width && row < height;
     }
 }

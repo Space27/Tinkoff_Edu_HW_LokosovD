@@ -11,8 +11,8 @@ public class DepthFirstSearch implements Solver {
     public List<Coordinate> solve(Maze maze, Coordinate start, Coordinate end) {
         List<Coordinate> way = new ArrayList<>();
 
-        if (maze.getCellType(start) == Cell.Type.WALL || maze.getCellType(end) == Cell.Type.WALL
-            || !maze.isIn(start) || !maze.isIn(end)) {
+        if (!maze.isIn(start) || !maze.isIn(end)
+            || maze.getCellType(start) == Cell.Type.WALL || maze.getCellType(end) == Cell.Type.WALL) {
             return way;
         } else if (start.equals(end)) {
             way.add(start);
