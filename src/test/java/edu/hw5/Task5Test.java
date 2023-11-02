@@ -33,7 +33,7 @@ public class Task5Test {
     @NullAndEmptySource
     @DisplayName("Пустая или null строка")
     void validatePassword_ShouldReturnFalseForEmptyOrNullRegistrationMark(String RegistrationMark) {
-        boolean matches = Task4.validatePassword(RegistrationMark);
+        boolean matches = Task5.validateRegistrationMark(RegistrationMark);
 
         assertThat(matches)
             .isFalse();
