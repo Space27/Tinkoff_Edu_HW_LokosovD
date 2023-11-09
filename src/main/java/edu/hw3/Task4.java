@@ -8,7 +8,7 @@ public final class Task4 {
     private static final int MAX_ROMAN_NUM = 3999;
 
     public static String convertToRoman(int number) throws IllegalArgumentException {
-        if (number < 0 || number > MAX_ROMAN_NUM) {
+        if (number <= 0 || number > MAX_ROMAN_NUM) {
             throw new IllegalArgumentException("Number out of Roman Range");
         }
         StringBuilder result = new StringBuilder();

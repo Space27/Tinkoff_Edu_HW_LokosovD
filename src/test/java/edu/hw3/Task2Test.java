@@ -13,37 +13,37 @@ import java.util.stream.Stream;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class Task2Test {
+class Task2Test {
 
     @ParameterizedTest
     @NullSource
     @DisplayName("null строка")
-    void clusterize_ShouldThrowExceptionForNullStr(String string) {
+    void clusterize_shouldThrowExceptionForNullStr(String string) {
         assertThrows(IllegalArgumentException.class, () -> Task2.clusterize(string));
     }
 
     @ParameterizedTest
     @EmptySource
     @DisplayName("Пустая строка")
-    void clusterize_ShouldReturnEmptyStrForEmptyStr(String string) {
-        ArrayList<String> result = Task2.clusterize(string);
+    void clusterize_shouldReturnEmptyArrayForEmptyArr(String string) {
+        List<String> result = Task2.clusterize(string);
 
         assertThat(result)
-            .isEqualTo(new ArrayList<>(List.of("")));
+            .isEmpty();
     }
 
     @ParameterizedTest
     @ValueSource(strings = {"(", ")", "(()", "())", " )", " (", "( ) )"})
     @DisplayName("В строке есть небалансируемые кластеры")
-    void clusterize_ShouldThrowExceptionIfClusterCantBeBalanced(String string) {
+    void clusterize_shouldThrowExceptionIfClusterCantBeBalanced(String string) {
         assertThrows(IllegalArgumentException.class, () -> Task2.clusterize(string));
     }
 
     @ParameterizedTest
     @MethodSource("provideStringsAndClusterizedArrayLists")
     @DisplayName("Корректные строки")
-    void clusterize_ShouldClusterizeValidStrings(String string, ArrayList<String> expected) {
-        ArrayList<String> result = Task2.clusterize(string);
+    void clusterize_shouldClusterizeValidStrings(String string, ArrayList<String> expected) {
+        List<String> result = Task2.clusterize(string);
 
         assertThat(result)
             .isEqualTo(expected);

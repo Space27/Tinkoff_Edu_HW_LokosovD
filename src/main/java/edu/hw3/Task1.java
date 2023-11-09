@@ -6,8 +6,7 @@ public final class Task1 {
     }
 
     private static boolean isLatin(char letter) {
-        return (int) letter >= (int) 'a' && (int) letter <= (int) 'z'
-            || (int) letter >= (int) 'A' && (int) letter <= (int) 'Z';
+        return letter >= 'a' && letter <= 'z' || letter >= 'A' && letter <= 'Z';
     }
 
     public static String atbash(String string) {
@@ -20,10 +19,10 @@ public final class Task1 {
         char startLetter;
 
         for (int i = 0; i < charArr.length; ++i) {
-            if (Character.isAlphabetic(charArr[i]) && isLatin(charArr[i])) {
+            if (isLatin(charArr[i])) {
                 endLetter = Character.isLowerCase(charArr[i]) ? 'z' : 'Z';
                 startLetter = Character.isLowerCase(charArr[i]) ? 'a' : 'A';
-                charArr[i] = (char) ((int) startLetter + (int) endLetter - (int) charArr[i]);
+                charArr[i] = (char) (startLetter + endLetter - charArr[i]);
             }
         }
 
