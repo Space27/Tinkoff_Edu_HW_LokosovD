@@ -15,10 +15,7 @@ class Task4Test {
     void convertToRoman_shouldReturnEmptyStringForZero() {
         int number = 0;
 
-        String convertedNumber = Task4.convertToRoman(number);
-
-        assertThat(convertedNumber)
-            .isEqualTo("");
+        assertThrows(IllegalArgumentException.class, () -> Task4.convertToRoman(number));
     }
 
     @Test
