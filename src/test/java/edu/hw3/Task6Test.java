@@ -10,12 +10,12 @@ import org.junit.jupiter.params.provider.MethodSource;
 import java.util.stream.Stream;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class Task6Test {
+class Task6Test {
 
     @ParameterizedTest
     @MethodSource("provideOneStock")
     @DisplayName("Добавление одной акции")
-    void PriorityQueueStockMarket_ShouldAddAndReturnTheSameStock(Stock stock) {
+    void priorityQueueStockMarket_shouldAddAndReturnTheSameStock(Stock stock) {
         StockMarket stockMarket = new PriorityQueueStockMarket();
 
         stockMarket.add(stock);
@@ -27,7 +27,7 @@ public class Task6Test {
     @ParameterizedTest
     @MethodSource("provideSeveralStock")
     @DisplayName("Добавление нескольких акций")
-    void PriorityQueueStockMarket_ShouldReturnTheMostValuableStockIfAddedMoreStocks(Stock[] stocks, Stock expected) {
+    void priorityQueueStockMarket_shouldReturnTheMostValuableStockIfAddedMoreStocks(Stock[] stocks, Stock expected) {
         StockMarket stockMarket = new PriorityQueueStockMarket();
 
         for (Stock i : stocks) {
@@ -40,8 +40,8 @@ public class Task6Test {
 
     @ParameterizedTest
     @MethodSource("provideSeveralStockAndSecondMax")
-    @DisplayName("Добавление нескольких акций")
-    void PriorityQueueStockMarket_ShouldReturnTheMostValuableStockIfAddedMoreStocksThenRemovedMax(
+    @DisplayName("Добавление нескольких акций и выталкивание двух максимумов")
+    void priorityQueueStockMarket_shouldReturnTheMostValuableStockIfAddedMoreStocksThenRemovedMax(
         Stock[] stocks,
         Stock max,
         Stock expected

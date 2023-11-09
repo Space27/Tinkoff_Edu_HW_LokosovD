@@ -18,11 +18,11 @@ import java.util.stream.Stream;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class Task8Test {
+class Task8Test {
 
     @Test
     @DisplayName("Запрос несуществующего элемента")
-    void BackwardIterator_ShouldNotIterateArraysIfLenEqualsZero() {
+    void BackwardIterator_shouldNotIterateArraysIfLenEqualsZero() {
         ArrayList<Object> arrayList = new ArrayList<>();
         Iterator<Object> backwardIterator = new BackwardIterator<>(arrayList);
 
@@ -32,7 +32,7 @@ public class Task8Test {
     @ParameterizedTest
     @MethodSource("provideCollectionsWithOneElement")
     @DisplayName("В коллекции один элемент")
-    void BackwardIterator_ShouldIterateCollectionsWithOneElement(Collection<Object> collection) {
+    void BackwardIterator_shouldIterateCollectionsWithOneElement(Collection<Object> collection) {
         Object[] resArr = new Object[collection.size()];
         Object[] expectedArr = new Object[collection.size()];
         Iterator<Object> backwardIterator = new BackwardIterator<>(collection);
@@ -50,7 +50,7 @@ public class Task8Test {
     @ParameterizedTest
     @MethodSource("provideCollectionsWithSeveralElements")
     @DisplayName("В коллекции несколько элементов")
-    void BackwardIterator_ShouldIterateCollectionsWithSeveralElements(Collection<Object> collection) {
+    void BackwardIterator_shouldIterateCollectionsWithSeveralElements(Collection<Object> collection) {
         Object[] resArr = new Object[collection.size()];
         Object[] expectedArr = new Object[collection.size()];
         Iterator<Object> backwardIterator = new BackwardIterator<>(collection);

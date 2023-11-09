@@ -4,7 +4,8 @@ import java.util.PriorityQueue;
 
 public class PriorityQueueStockMarket implements StockMarket {
 
-    PriorityQueue<Stock> market = new PriorityQueue<>((Stock s1, Stock s2) -> Integer.compare(s2.price(), s1.price()));
+    private final PriorityQueue<Stock> market =
+        new PriorityQueue<>((Stock s1, Stock s2) -> Integer.compare(s2.price(), s1.price()));
 
     @Override
     public void add(Stock stock) {

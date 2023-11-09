@@ -3,6 +3,7 @@ package edu.hw3;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -13,13 +14,13 @@ import org.junit.jupiter.params.provider.NullSource;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class Task3Test {
+class Task3Test {
 
     @ParameterizedTest
     @MethodSource("provideOneLenArr")
     @DisplayName("Список из одного элемента")
-    void freqDict_ShouldReturnElementWithOneForOneLenList(ArrayList<Object> list, HashMap<Object, Integer> expMap) {
-        HashMap<Object, Integer> map = Task3.freqDict(list);
+    void freqDict_shouldReturnElementWithOneForOneLenList(ArrayList<Object> list, Map<Object, Integer> expMap) {
+        Map<Object, Integer> map = Task3.freqDict(list);
 
         assertThat(map).
             isEqualTo(expMap);
@@ -28,24 +29,24 @@ public class Task3Test {
     @ParameterizedTest
     @MethodSource("provideArrWithDifferentElements")
     @DisplayName("Список из нескольких разных элементов")
-    void freqDict_ShouldReturnElementsWithOneForListWithDifferentElements(
+    void freqDict_shouldReturnElementsWithOneForListWithDifferentElements(
         ArrayList<Object> list,
-        HashMap<Object, Integer> expMap
+        Map<Object, Integer> expMap
     ) {
-        HashMap<Object, Integer> map = Task3.freqDict(list);
+        Map<Object, Integer> map = Task3.freqDict(list);
 
         assertThat(map).
             isEqualTo(expMap);
     }
 
     @ParameterizedTest
-    @MethodSource("provideArrWithWithTwoSameElements")
+    @MethodSource("provideArrWithTwoSameElements")
     @DisplayName("Список из двух одинаковых элементов")
-    void freqDict_ShouldReturnElementsWithTwoForListWithTwoSameElements(
+    void freqDict_shouldReturnElementsWithTwoForListWithTwoSameElements(
         ArrayList<Object> list,
-        HashMap<Object, Integer> expMap
+        Map<Object, Integer> expMap
     ) {
-        HashMap<Object, Integer> map = Task3.freqDict(list);
+        Map<Object, Integer> map = Task3.freqDict(list);
 
         assertThat(map).
             isEqualTo(expMap);
@@ -54,11 +55,11 @@ public class Task3Test {
     @ParameterizedTest
     @MethodSource("provideArr")
     @DisplayName("Корректный список")
-    void freqDict_ShouldReturnCorrectMapForValidList(
+    void freqDict_shouldReturnCorrectMapForValidList(
         ArrayList<Object> list,
-        HashMap<Object, Integer> expMap
+        Map<Object, Integer> expMap
     ) {
-        HashMap<Object, Integer> map = Task3.freqDict(list);
+        Map<Object, Integer> map = Task3.freqDict(list);
 
         assertThat(map).
             isEqualTo(expMap);
@@ -67,16 +68,16 @@ public class Task3Test {
     @ParameterizedTest
     @NullSource
     @DisplayName("Список - null")
-    void freqDict_ShouldReturnNullForNull(ArrayList<Object> list) {
+    void freqDict_shouldReturnNullForNull(ArrayList<Object> list) {
         assertThrows(IllegalArgumentException.class, () -> Task3.freqDict(list));
     }
 
     @ParameterizedTest
     @EmptySource
-    @DisplayName("Список из двух одинаковых элементов")
-    void freqDict_ShouldReturnEmptyMapForEmptyList(ArrayList<Object> list) {
-        HashMap<Object, Integer> map = Task3.freqDict(list);
-        HashMap<Object, Integer> expMap = new HashMap<>();
+    @DisplayName("Пустой список")
+    void freqDict_shouldReturnEmptyMapForEmptyList(ArrayList<Object> list) {
+        Map<Object, Integer> map = Task3.freqDict(list);
+        Map<Object, Integer> expMap = new HashMap<>();
 
         assertThat(map).
             isEqualTo(expMap);
@@ -86,21 +87,15 @@ public class Task3Test {
         return Stream.of(
             Arguments.of(
                 new ArrayList<Object>(List.of("hello")),
-                new HashMap<Object, Integer>() {{
-                    put("hello", 1);
-                }}
+                Map.of("hello", 1)
             ),
             Arguments.of(
                 new ArrayList<Object>(List.of(1)),
-                new HashMap<Object, Integer>() {{
-                    put(1, 1);
-                }}
+                Map.of(1, 1)
             ),
             Arguments.of(
                 new ArrayList<Object>(List.of('c')),
-                new HashMap<Object, Integer>() {{
-                    put('c', 1);
-                }}
+                Map.of('c', 1)
             )
         );
     }
@@ -109,50 +104,41 @@ public class Task3Test {
         return Stream.of(
             Arguments.of(
                 new ArrayList<Object>(List.of("he", "ho")),
-                new HashMap<Object, Integer>() {{
-                    put("he", 1);
-                    put("ho", 1);
-                }}
+                Map.of("he", 1,
+                    "ho", 1
+                )
             ),
             Arguments.of(
                 new ArrayList<Object>(List.of(1, 2, 3, 4)),
-                new HashMap<Object, Integer>() {{
-                    put(1, 1);
-                    put(2, 1);
-                    put(3, 1);
-                    put(4, 1);
-                }}
+                Map.of(1, 1,
+                    2, 1,
+                    3, 1,
+                    4, 1
+                )
             ),
             Arguments.of(
                 new ArrayList<Object>(List.of('c', 'a', 'b')),
-                new HashMap<Object, Integer>() {{
-                    put('a', 1);
-                    put('b', 1);
-                    put('c', 1);
-                }}
+                Map.of('c', 1,
+                    'a', 1,
+                    'b', 1
+                )
             )
         );
     }
 
-    private static Stream<Arguments> provideArrWithWithTwoSameElements() {
+    private static Stream<Arguments> provideArrWithTwoSameElements() {
         return Stream.of(
             Arguments.of(
                 new ArrayList<Object>(List.of("hello", "hello")),
-                new HashMap<Object, Integer>() {{
-                    put("hello", 2);
-                }}
+                Map.of("hello", 2)
             ),
             Arguments.of(
                 new ArrayList<Object>(List.of(1, 1)),
-                new HashMap<Object, Integer>() {{
-                    put(1, 2);
-                }}
+                Map.of(1, 2)
             ),
             Arguments.of(
                 new ArrayList<Object>(List.of('c', 'c')),
-                new HashMap<Object, Integer>() {{
-                    put('c', 2);
-                }}
+                Map.of('c', 2)
             )
         );
     }
@@ -161,33 +147,29 @@ public class Task3Test {
         return Stream.of(
             Arguments.of(
                 new ArrayList<Object>(List.of("a", "bb", "a", "bb")),
-                new HashMap<Object, Integer>() {{
-                    put("a", 2);
-                    put("bb", 2);
-                }}
+                Map.of("a", 2,
+                    "bb", 2
+                )
             ),
             Arguments.of(
                 new ArrayList<Object>(List.of("this", "and", "that", "and")),
-                new HashMap<Object, Integer>() {{
-                    put("this", 1);
-                    put("and", 2);
-                    put("that", 1);
-                }}
+                Map.of("this", 1,
+                    "and", 2,
+                    "that", 1
+                )
             ),
             Arguments.of(
                 new ArrayList<Object>(List.of("код", "код", "код", "bug")),
-                new HashMap<Object, Integer>() {{
-                    put("код", 3);
-                    put("bug", 1);
-                }}
+                Map.of("код", 3,
+                    "bug", 1
+                )
             ),
             Arguments.of(
                 new ArrayList<Object>(List.of(1, 1, 2, 2, 1, 3)),
-                new HashMap<Object, Integer>() {{
-                    put(1, 3);
-                    put(2, 2);
-                    put(3, 1);
-                }}
+                Map.of(1, 3,
+                    2, 2,
+                    3, 1
+                )
             )
         );
     }
