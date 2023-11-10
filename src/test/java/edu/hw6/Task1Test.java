@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 import static org.assertj.core.api.Assertions.assertThat;
 
-class DiskMapTest {
+class Task1Test {
 
     Path path = Path.of("src/test/java/edu/hw6/test.txt");
 
