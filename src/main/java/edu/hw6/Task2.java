@@ -1,4 +1,4 @@
-package edu.hw5;
+package edu.hw6;
 
 import java.io.IOException;
 import java.nio.file.Files;

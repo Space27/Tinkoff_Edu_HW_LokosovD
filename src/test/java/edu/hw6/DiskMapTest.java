@@ -1,4 +1,4 @@
-package edu.hw5;
+package edu.hw6;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -10,9 +10,9 @@ import java.util.HashMap;
 import java.util.Map;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class DiskMapTest {
+class DiskMapTest {
 
-    Path path = Path.of("src/test/java/edu/hw5/test.txt");
+    Path path = Path.of("src/test/java/edu/hw6/test.txt");
 
     @Test
     @DisplayName("При создании Map должен быть пустым")
