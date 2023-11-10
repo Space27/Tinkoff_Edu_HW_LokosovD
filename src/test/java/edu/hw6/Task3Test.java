@@ -115,8 +115,8 @@ class Task3Test {
 
     @Test
     @DisplayName("Фильтр на размер меньше")
-    void writable_shouldFilterOnlyFilesWithLowerSize() {
-        DirectoryStream.Filter<Path> filter = lowerThan(5);
+    void writable_shouldFilterOnlyFilesWithLowerSize() throws IOException {
+        DirectoryStream.Filter<Path> filter = lowerThan((int) Files.size(dir.resolve("NotReadable.txt")));
         List<String> expectedFileNames = List.of("NotAFile", "NotWritable");
 
         try (DirectoryStream<Path> entries = Files.newDirectoryStream(dir, filter)) {
