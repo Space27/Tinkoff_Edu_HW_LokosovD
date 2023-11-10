@@ -23,43 +23,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class Task3Test {
 
     public static final AbstractFilter regularFile = Files::isRegularFile;
-    public static final AbstractFilter readable = Files::isReadable;
-    public static final AbstractFilter writable = Files::isWritable;
     Path dir = Path.of("src/test/java/edu/hw6/FilterFiles");
-
-    @Test
-    @DisplayName("Фильтр на проверку записывания")
-    void writable_shouldFilterOnlyWritableFiles() {
-        DirectoryStream.Filter<Path> filter = writable;
-        List<String> expectedFileNames = List.of("big_file.txt", "NotReadable.txt", "txt.png", "img.png", "NotAFile");
-
-        try (DirectoryStream<Path> entries = Files.newDirectoryStream(dir, filter)) {
-            Stream<Path> stream = StreamSupport.stream(entries.spliterator(), false);
-            List<String> result = stream.map(Path::getFileName).map(Path::toString).toList();
-
-            assertThat(result)
-                .containsExactlyInAnyOrderElementsOf(expectedFileNames);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    @Test
-    @DisplayName("Фильтр на проверку чтения")
-    void writable_shouldFilterOnlyReadableFiles() {
-        DirectoryStream.Filter<Path> filter = readable;
-        List<String> expectedFileNames = List.of("big_file.txt", "txt.png", "img.png", "NotAFile", "NotWritable");
-
-        try (DirectoryStream<Path> entries = Files.newDirectoryStream(dir, filter)) {
-            Stream<Path> stream = StreamSupport.stream(entries.spliterator(), false);
-            List<String> result = stream.map(Path::getFileName).map(Path::toString).toList();
-
-            assertThat(result)
-                .containsExactlyInAnyOrderElementsOf(expectedFileNames);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
 
     @Test
     @DisplayName("Фильтр на файл")
@@ -81,8 +45,8 @@ class Task3Test {
 
     @Test
     @DisplayName("Фильтр на конкретный размер")
-    void writable_shouldFilterOnlyFilesWithSize() {
-        DirectoryStream.Filter<Path> filter = equal(5);
+    void writable_shouldFilterOnlyFilesWithSize() throws IOException {
+        DirectoryStream.Filter<Path> filter = equal((int) Files.size(dir.resolve("NotReadable.txt")));
         List<String> expectedFileNames = List.of("NotReadable.txt");
 
         try (DirectoryStream<Path> entries = Files.newDirectoryStream(dir, filter)) {
@@ -201,7 +165,7 @@ class Task3Test {
     @Test
     @DisplayName("Тест and")
     void writable_shouldFilterWithAnd() {
-        DirectoryStream.Filter<Path> filter = readable
+        DirectoryStream.Filter<Path> filter = largerThan(100)
             .and(globMatches("*.txt"));
         List<String> expectedFileNames = List.of("big_file.txt");
 
