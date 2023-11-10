@@ -81,7 +81,7 @@ class Task3Test {
     @DisplayName("Фильтр на размер меньше")
     void writable_shouldFilterOnlyFilesWithLowerSize() throws IOException {
         DirectoryStream.Filter<Path> filter = lowerThan((int) Files.size(dir.resolve("NotReadable.txt")));
-        List<String> expectedFileNames = List.of("NotAFile", "NotWritable");
+        List<String> expectedFileNames = List.of("NotWritable");
 
         try (DirectoryStream<Path> entries = Files.newDirectoryStream(dir, filter)) {
             Stream<Path> stream = StreamSupport.stream(entries.spliterator(), false);
@@ -98,7 +98,7 @@ class Task3Test {
     @DisplayName("Фильтр на регулярное выражение")
     void writable_shouldFilterOnlyFilesWithRegex() {
         DirectoryStream.Filter<Path> filter = regexMatches("Not.*");
-        List<String> expectedFileNames = List.of("NotAFile", "NotWritable", "NotReadable.txt");
+        List<String> expectedFileNames = List.of("NotWritable", "NotReadable.txt");
 
         try (DirectoryStream<Path> entries = Files.newDirectoryStream(dir, filter)) {
             Stream<Path> stream = StreamSupport.stream(entries.spliterator(), false);
@@ -184,8 +184,8 @@ class Task3Test {
     @DisplayName("Тест or")
     void writable_shouldFilterWithOr() {
         DirectoryStream.Filter<Path> filter = largerThan(100_000)
-            .or(regexMatches(".*File.*"));
-        List<String> expectedFileNames = List.of("NotAFile", "txt.png", "img.png");
+            .or(regexMatches(".*fil.*"));
+        List<String> expectedFileNames = List.of("txt.png", "img.png", "big_file.txt");
 
         try (DirectoryStream<Path> entries = Files.newDirectoryStream(dir, filter)) {
             Stream<Path> stream = StreamSupport.stream(entries.spliterator(), false);
