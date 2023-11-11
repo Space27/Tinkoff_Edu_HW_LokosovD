@@ -1,6 +1,10 @@
 package edu.project3;
 
-import java.time.LocalDate;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.nio.file.Path;
+import java.time.LocalDateTime;
+import java.util.List;
 import org.apache.logging.log4j.core.tools.picocli.CommandLine;
 
 @CommandLine.Command(name = "nginx log stats",
@@ -34,16 +38,23 @@ public final class LogAnalyzer implements Runnable {
 
     @Override
     public void run() {
-        LocalDate startDate = LocalDate.MIN;
-        LocalDate endDate = LocalDate.MAX;
-        Format outputFormat;
+        LocalDateTime startDate = LocalDateTime.MIN;
+        LocalDateTime endDate = LocalDateTime.MAX;
+        Format outputFormat = CLIParser.parseOutputFormatFromString(format);
 
         if (CLIParser.parseDateFromString(from) != null) {
             startDate = CLIParser.parseDateFromString(from);
         }
         if (CLIParser.parseDateFromString(to) != null) {
-            startDate = CLIParser.parseDateFromString(to);
+            endDate = CLIParser.parseDateFromString(to);
         }
-        outputFormat = CLIParser.parseOutputFormatFromString(format);
+
+        List<Log> logList;
+        try {
+            logList = LogParser.parseStringList(new HttpSource(new URI(path)).getStringList());
+        } catch (URISyntaxException e) {
+            logList = LogParser.parseStringList(new FileSource(Path.of(path)).getStringList());
+        }
+        logList = LogParser.filterLogsForDate(logList, startDate, endDate);
     }
 }

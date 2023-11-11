@@ -1,6 +1,7 @@
 package edu.project3;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeParseException;
 
 public final class CLIParser {
@@ -8,13 +9,17 @@ public final class CLIParser {
     private CLIParser() {
     }
 
-    public static LocalDate parseDateFromString(String string) {
-        LocalDate result = null;
+    public static LocalDateTime parseDateFromString(String string) {
+        LocalDateTime result = null;
 
         if (string != null) {
             try {
-                result = LocalDate.parse(string);
-            } catch (DateTimeParseException ignored) {
+                result = LocalDateTime.parse(string);
+            } catch (DateTimeParseException e) {
+                try {
+                    result = LocalDate.parse(string).atStartOfDay();
+                } catch (DateTimeParseException ignored) {
+                }
             }
         }
 
