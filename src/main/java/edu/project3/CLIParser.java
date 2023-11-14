@@ -9,28 +9,18 @@ public final class CLIParser {
     private CLIParser() {
     }
 
-    public static LocalDateTime parseDateFromString(String string) {
+    public static LocalDateTime parseDateFromString(String value) {
         LocalDateTime result = null;
 
-        if (string != null) {
+        if (value != null) {
             try {
-                result = LocalDateTime.parse(string);
+                result = LocalDateTime.parse(value);
             } catch (DateTimeParseException e) {
                 try {
-                    result = LocalDate.parse(string).atStartOfDay();
+                    result = LocalDate.parse(value).atStartOfDay();
                 } catch (DateTimeParseException ignored) {
                 }
             }
-        }
-
-        return result;
-    }
-
-    public static LogAnalyzer.Format parseOutputFormatFromString(String string) {
-        LogAnalyzer.Format result = LogAnalyzer.Format.markdown;
-
-        if (string != null && string.equals("adoc")) {
-            result = LogAnalyzer.Format.adoc;
         }
 
         return result;

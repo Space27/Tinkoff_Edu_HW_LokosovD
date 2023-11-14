@@ -3,6 +3,7 @@ package edu.project3;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
 
 public class FileSource implements LogSource {
@@ -15,10 +16,13 @@ public class FileSource implements LogSource {
 
     @Override
     public List<String> getStringList() {
+        List<String> result = new ArrayList<>();
+
         try {
-            return Files.readAllLines(path);
-        } catch (IOException e) {
-            return List.of();
+            result.addAll(Files.readAllLines(path));
+        } catch (IOException ignored) {
         }
+
+        return result;
     }
 }
