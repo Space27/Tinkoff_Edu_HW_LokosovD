@@ -67,9 +67,5 @@ class Task4Test {
 
         assertThat(parallelRes)
             .isLessThan(simpleRes);
-
-        System.out.println(simpleRes + "-simple");
-        System.out.println(parallelRes + "-parallel");
-        System.out.println(simpleRes / parallelRes + "-simple/parallel");
     }
 }
