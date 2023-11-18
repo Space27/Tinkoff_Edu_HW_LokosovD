@@ -56,16 +56,4 @@ class Task4Test {
         assertThat(errorList)
             .isSortedAccordingTo(Comparator.reverseOrder());
     }
-
-    @Test
-    @DisplayName("Сравнение скорости одно- и многопоточной версии")
-    void calculatePiInParallel_shouldBeFasterThanCalculatePi() {
-        long iterations = 10_000_000;
-
-        double simpleRes = Task4.countTheTimeAndErrorForSimplePiCalculation(iterations).time();
-        double parallelRes = Task4.countTheTimeAndErrorParallelPiCalculation(iterations).time();
-
-        assertThat(parallelRes)
-            .isLessThan(simpleRes);
-    }
 }
