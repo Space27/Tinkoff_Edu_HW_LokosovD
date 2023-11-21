@@ -11,9 +11,11 @@ public final class Task1 {
     private Task1() {
     }
 
-    public static Duration getAvgSessionTime(List<String> sessionPeriods) throws IllegalArgumentException {
+    private static final int MINUTES_IN_HOUR = 60;
+
+    public static String getAvgSessionTime(List<String> sessionPeriods) throws IllegalArgumentException {
         if (sessionPeriods == null || sessionPeriods.isEmpty()) {
-            return Duration.ofSeconds(0);
+            return "0ч 0м";
         }
 
         final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd, hh:mm");
@@ -42,6 +44,7 @@ public final class Task1 {
             }
         }
 
-        return Duration.ofMinutes(minutesSum / sessionPeriods.size());
+        long resultMinutes = minutesSum / sessionPeriods.size();
+        return String.format("%dч %dм", resultMinutes / MINUTES_IN_HOUR, resultMinutes % MINUTES_IN_HOUR);
     }
 }

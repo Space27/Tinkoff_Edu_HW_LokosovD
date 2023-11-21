@@ -5,7 +5,6 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
-import java.time.Duration;
 import java.util.List;
 import java.util.stream.Stream;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -17,10 +16,10 @@ public class Task1Test {
     @NullAndEmptySource
     @DisplayName("Пустой или null список")
     void getAvgSessionTime_ShouldReturnZeroForEmptyOrNullList(List<String> list) {
-        Duration avgTime = Task1.getAvgSessionTime(list);
+        String avgTime = Task1.getAvgSessionTime(list);
 
-        assertThat(avgTime.isZero())
-            .isTrue();
+        assertThat(avgTime)
+            .isEqualTo("0ч 0м");
     }
 
     @ParameterizedTest
@@ -33,20 +32,20 @@ public class Task1Test {
     @ParameterizedTest
     @MethodSource("provideOneSizeList")
     @DisplayName("Список из 1 периода")
-    void getAvgSessionTime_ShouldReturnPeriodTimeForOneSizeList(List<String> list, long expected) {
-        Duration avgTime = Task1.getAvgSessionTime(list);
+    void getAvgSessionTime_ShouldReturnPeriodTimeForOneSizeList(List<String> list, String expected) {
+        String avgTime = Task1.getAvgSessionTime(list);
 
-        assertThat(avgTime.toMinutes())
+        assertThat(avgTime)
             .isEqualTo(expected);
     }
 
     @ParameterizedTest
     @MethodSource("provideValidList")
     @DisplayName("Список из валидных периодов")
-    void getAvgSessionTime_ShouldReturnPeriodTimeForValidList(List<String> list, long expected) {
-        Duration avgTime = Task1.getAvgSessionTime(list);
+    void getAvgSessionTime_ShouldReturnPeriodTimeForValidList(List<String> list, String expected) {
+        String avgTime = Task1.getAvgSessionTime(list);
 
-        assertThat(avgTime.toMinutes())
+        assertThat(avgTime)
             .isEqualTo(expected);
     }
 
@@ -65,9 +64,9 @@ public class Task1Test {
 
     private static Stream<Arguments> provideOneSizeList() {
         return Stream.of(
-            Arguments.of(List.of("2022-03-12, 20:20 - 2022-03-12, 23:50"), 210),
-            Arguments.of(List.of("2022-04-01, 21:30 - 2022-04-02, 01:20"), 230),
-            Arguments.of(List.of("2022-04-01, 21:30 - 2022-04-01, 21:30"), 0)
+            Arguments.of(List.of("2022-03-12, 20:20 - 2022-03-12, 23:50"), "3ч 30м"),
+            Arguments.of(List.of("2022-04-01, 21:30 - 2022-04-02, 01:20"), "3ч 50м"),
+            Arguments.of(List.of("2022-04-01, 21:30 - 2022-04-01, 21:30"), "0ч 0м")
         );
     }
 
@@ -76,12 +75,12 @@ public class Task1Test {
             Arguments.of(List.of(
                 "2022-03-12, 20:20 - 2022-03-12, 23:50",
                 "2022-04-01, 21:30 - 2022-04-02, 01:20"
-            ), 220),
+            ), "3ч 40м"),
             Arguments.of(List.of(
                 "2022-03-12, 20:20 - 2022-03-12, 20:20",
                 "2022-03-13, 20:20 - 2022-03-13, 20:20",
                 "2022-04-01, 21:30 - 2022-04-02, 01:20"
-            ), 76)
+            ), "1ч 16м")
         );
     }
 }

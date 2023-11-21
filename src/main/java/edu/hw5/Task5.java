@@ -12,7 +12,7 @@ public final class Task5 {
             return false;
         }
 
-        Pattern pattern = Pattern.compile("[АAВBЕEКKМMНHОOРPСCТTУYХX]\\d{3}[АAВBЕEКKМMНHОOРPСCТTУYХX]{2}\\d{2,3}");
+        Pattern pattern = Pattern.compile("[АВЕКМНОРСТУХ]\\d{3}[АВЕКМНОРСТУ]{2}\\d{2,3}");
 
         return pattern.matcher(registrationMark).matches();
     }

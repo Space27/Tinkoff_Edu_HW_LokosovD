@@ -14,27 +14,35 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.stream.Stream;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class Task3Test {
 
-    private static FormatProcessor getChainOfFormatProcessor() {
-        FormatProcessor daysAgoProcessor = new DaysAgoProcessor(null);
-        FormatProcessor yesterdayProcessor = new YesterdayProcessor(daysAgoProcessor);
-        FormatProcessor todayProcessor = new TodayProcessor(yesterdayProcessor);
-        FormatProcessor tomorrowProcessor = new TomorrowProcessor(todayProcessor);
-        FormatProcessor reverseDateProcessor = new ReverseDateProcessor(tomorrowProcessor);
-        FormatProcessor reverseDateProcessorWithShortedYear =
-            new ReverseDateProcessorWithShortedYear(reverseDateProcessor);
-        return new CommonDateProcessor(reverseDateProcessorWithShortedYear);
+    List<FormatProcessor> chain = List.of(
+        new DaysAgoProcessor(null),
+        new YesterdayProcessor(null),
+        new TodayProcessor(null),
+        new TomorrowProcessor(null),
+        new ReverseDateProcessor(null),
+        new ReverseDateProcessorWithShortedYear(null),
+        new CommonDateProcessor(null)
+    );
+
+    FormatProcessor getChainByList(List<FormatProcessor> formatProcessors) {
+        FormatProcessor startProc = formatProcessors.get(0);
+
+        startProc.setNextByList(formatProcessors.subList(1, formatProcessors.size()));
+
+        return startProc;
     }
 
     @ParameterizedTest
     @MethodSource("provideValidDateFormats")
     @DisplayName("Корректные форматы дат")
     void processTheDate_ShouldProcessValidDateFormats(String date, LocalDate localDate) {
-        FormatProcessor formatProcessor = getChainOfFormatProcessor();
+        FormatProcessor formatProcessor = getChainByList(chain);
 
         assertThat(formatProcessor.processTheDate(date))
             .isNotEmpty();
@@ -48,7 +56,7 @@ public class Task3Test {
     @ValueSource(strings = {"20-11-10", "date", "1-3-1975", "1 days ago", "0 days ago", "-1 days ago"})
     @DisplayName("Некорректные форматы дат")
     void processTheDate_ShouldReturnEmptyOptionalForNotValidDateFormat(String date) {
-        FormatProcessor formatProcessor = getChainOfFormatProcessor();
+        FormatProcessor formatProcessor = getChainByList(chain);
 
         assertThat(formatProcessor.processTheDate(date))
             .isEmpty();

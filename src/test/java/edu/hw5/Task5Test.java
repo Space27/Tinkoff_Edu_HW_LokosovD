@@ -9,7 +9,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class Task5Test {
 
     @ParameterizedTest
-    @ValueSource(strings = {"А123ВЕ777", "О777ОО177", "А123ВЕ77", "A123BE77"})
+    @ValueSource(strings = {"А123ВЕ777", "О777ОО177", "А123ВЕ77"})
     @DisplayName("Правильные номерные знаки")
     void validateRegistrationMark_ShouldReturnTrueForValidRegistrationMark(String registrationMark) {
         boolean matches = Task5.validateRegistrationMark(registrationMark);
@@ -20,7 +20,7 @@ public class Task5Test {
 
     @ParameterizedTest
     @ValueSource(strings = {"", "123АВЕ777", "А123ВЕ7777", "А123ВЕ7", "1АВЕ23АВЕ", "А123ВЕ", "123ВЕ777", "А12ВЕ777",
-        "А123В777", "АВЕ777", "А1ВЕ777", "А123ВЕE777", "АB123ВЕ777", "А123ВЕ777B"})
+        "А123В777", "АВЕ777", "А1ВЕ777", "А123ВЕE777", "АB123ВЕ777", "А123ВЕ777B", "A123BE77"})
     @DisplayName("Неправильные номерные знаки")
     void validateRegistrationMark_ShouldReturnFalseForNotValidRegistrationMark(String registrationMark) {
         boolean matches = Task5.validateRegistrationMark(registrationMark);
