@@ -34,6 +34,10 @@ public final class Maze {
         return grid[coordinate.row()][coordinate.col()].getType();
     }
 
+    public boolean isWall(int col, int row) {
+        return grid[row][col].getType() == Cell.Type.WALL;
+    }
+
     public int getHeight() {
         return height;
     }

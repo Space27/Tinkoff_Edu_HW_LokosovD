@@ -4,10 +4,10 @@ import java.util.Random;
 
 public class CellularAutomata implements MazeGenerator {
 
-    final static double CHANCE_TO_WALL = 0.45;
-    final static int DEATH_LIMIT = 7;
-    final static int BIRTH_LIMIT = 2;
-    final static int STEP_NUMBER = 7;
+    private final static double CHANCE_TO_WALL = 0.45;
+    private final static int DEATH_LIMIT = 7;
+    private final static int BIRTH_LIMIT = 2;
+    private final static int STEP_NUMBER = 7;
 
     @Override
     public Maze generate(int height, int width) {

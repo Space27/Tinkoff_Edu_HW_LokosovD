@@ -16,7 +16,7 @@ public class PrimGenerator implements MazeGenerator {
         int y = rnd.nextInt(height / 2) * 2 + 1;
         maze.setCellType(x, y, Cell.Type.PASSAGE);
 
-        List<Coordinate> toCheck = getAvailableCoordinates(height, width, x, y);
+        List<Coordinate> toCheck = getAvailableCoordinates(maze, x, y);
 
         while (!toCheck.isEmpty()) {
             int index = rnd.nextInt(toCheck.size());
@@ -30,73 +30,78 @@ public class PrimGenerator implements MazeGenerator {
                 new ArrayList<>(List.of(Direction.NORTH, Direction.SOUTH, Direction.EAST, Direction.WEST));
             while (!directions.isEmpty()) {
                 int dirIndex = rnd.nextInt(directions.size());
-                switch (directions.get(dirIndex)) {
-                    case Direction.NORTH:
-                        if (y - 2 >= 0 && maze.getCellType(x, y - 2) == Cell.Type.PASSAGE) {
-                            maze.setCellType(x, y - 1, Cell.Type.PASSAGE);
-                            directions.clear();
-                        }
-                        break;
-                    case Direction.SOUTH:
-                        if (y + 2 < height && maze.getCellType(x, y + 2) == Cell.Type.PASSAGE) {
-                            maze.setCellType(x, y + 1, Cell.Type.PASSAGE);
-                            directions.clear();
-                        }
-                        break;
-                    case Direction.EAST:
-                        if (x - 2 >= 0 && maze.getCellType(x - 2, y) == Cell.Type.PASSAGE) {
-                            maze.setCellType(x - 1, y, Cell.Type.PASSAGE);
-                            directions.clear();
-                        }
-                        break;
-                    case Direction.WEST:
-                        if (x + 2 < width && maze.getCellType(x + 2, y) == Cell.Type.PASSAGE) {
-                            maze.setCellType(x + 1, y, Cell.Type.PASSAGE);
-                            directions.clear();
-                        }
-                        break;
-                    default:
-                        break;
-                }
+                digPathInFreeDirection(maze, directions, x, y, dirIndex);
                 if (!directions.isEmpty()) {
                     directions.remove(dirIndex);
                 }
             }
 
-            addAvailableWalls(height, width, x, y, maze, toCheck);
+            addAvailableWalls(x, y, maze, toCheck);
         }
 
         return maze;
     }
 
-    private void addAvailableWalls(int height, int width, int x, int y, Maze maze, List<Coordinate> toCheck) {
-        if (y - 2 >= 0 && maze.getCellType(x, y - 2) == Cell.Type.WALL) {
+    private void digPathInFreeDirection(Maze maze, List<Direction> directions, int x, int y, int dirIndex) {
+        switch (directions.get(dirIndex)) {
+            case Direction.NORTH:
+                if (maze.isIn(x, y - 2) && !maze.isWall(x, y - 2)) {
+                    maze.setCellType(x, y - 1, Cell.Type.PASSAGE);
+                    directions.clear();
+                }
+                break;
+            case Direction.SOUTH:
+                if (maze.isIn(x, y + 2) && !maze.isWall(x, y + 2)) {
+                    maze.setCellType(x, y + 1, Cell.Type.PASSAGE);
+                    directions.clear();
+                }
+                break;
+            case Direction.EAST:
+                if (maze.isIn(x - 2, y) && !maze.isWall(x - 2, y)) {
+                    maze.setCellType(x - 1, y, Cell.Type.PASSAGE);
+                    directions.clear();
+                }
+                break;
+            case Direction.WEST:
+                if (maze.isIn(x + 2, y) && !maze.isWall(x + 2, y)) {
+                    maze.setCellType(x + 1, y, Cell.Type.PASSAGE);
+                    directions.clear();
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void addAvailableWalls(int x, int y, Maze maze, List<Coordinate> toCheck) {
+        if (maze.isIn(x, y - 2) && maze.isWall(x, y - 2)) {
             toCheck.add(new Coordinate(x, y - 2));
         }
-        if (y + 2 < height && maze.getCellType(x, y + 2) == Cell.Type.WALL) {
+        if (maze.isIn(x, y + 2) && maze.isWall(x, y + 2)) {
             toCheck.add(new Coordinate(x, y + 2));
         }
-        if (x - 2 >= 0 && maze.getCellType(x - 2, y) == Cell.Type.WALL) {
+        if (maze.isIn(x - 2, y) && maze.isWall(x - 2, y)) {
             toCheck.add(new Coordinate(x - 2, y));
         }
-        if (x + 2 < width && maze.getCellType(x + 2, y) == Cell.Type.WALL) {
+        if (maze.isIn(x + 2, y) && maze.isWall(x + 2, y)) {
             toCheck.add(new Coordinate(x + 2, y));
         }
     }
 
-    @NotNull private static List<Coordinate> getAvailableCoordinates(int height, int width, int x, int y) {
+    @NotNull
+    private static List<Coordinate> getAvailableCoordinates(Maze maze, int x, int y) {
         List<Coordinate> toCheck = new ArrayList<>();
 
-        if (y - 2 >= 0) {
+        if (maze.isIn(x, y - 2)) {
             toCheck.add(new Coordinate(x, y - 2));
         }
-        if (y + 2 < height) {
+        if (maze.isIn(x, y + 2)) {
             toCheck.add(new Coordinate(x, y + 2));
         }
-        if (x - 2 >= 0) {
+        if (maze.isIn(x - 2, y)) {
             toCheck.add(new Coordinate(x - 2, y));
         }
-        if (x + 2 < width) {
+        if (maze.isIn(x + 2, y)) {
             toCheck.add(new Coordinate(x + 2, y));
         }
 

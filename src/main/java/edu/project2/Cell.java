@@ -7,7 +7,7 @@ public class Cell {
         PASSAGE
     }
 
-    Type type;
+    private Type type;
 
     public Cell() {
         this.type = Type.WALL;
