@@ -5,12 +5,16 @@ import java.util.Random;
 public class CellularAutomata implements MazeGenerator {
 
     private final static double CHANCE_TO_WALL = 0.45;
-    private final static int DEATH_LIMIT = 7;
+    private final static int DEATH_LIMIT = 6;
     private final static int BIRTH_LIMIT = 2;
-    private final static int STEP_NUMBER = 7;
+    private final static int STEP_NUMBER = 15;
 
     @Override
     public Maze generate(int height, int width) {
+        if (height <= 1 || width <= 1) {
+            return null;
+        }
+
         Maze maze = new Maze(height, width);
         Random rnd = new Random();
 

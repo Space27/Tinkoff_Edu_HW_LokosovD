@@ -10,6 +10,9 @@ public class PrimGenerator implements MazeGenerator {
 
     @Override
     public Maze generate(int height, int width) {
+        if (height <= 1 || width <= 1) {
+            return null;
+        }
         Maze maze = new Maze(height, width);
         Random rnd = new Random();
         int x = rnd.nextInt(width / 2) * 2 + 1;
