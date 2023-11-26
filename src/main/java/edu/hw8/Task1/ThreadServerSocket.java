@@ -1,4 +1,4 @@
-package edu.hw8;
+package edu.hw8.Task1;
 
 import java.io.IOException;
 import java.net.ServerSocket;

@@ -1,5 +1,7 @@
 package edu.hw8;
 
+import edu.hw8.Task1.ThreadClientSocket;
+import edu.hw8.Task1.ThreadServerSocket;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
