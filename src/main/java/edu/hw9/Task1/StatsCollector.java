@@ -1,4 +1,4 @@
-package edu.hw9;
+package edu.hw9.Task1;
 
 import java.util.Arrays;
 import java.util.Comparator;
