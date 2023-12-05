@@ -50,8 +50,11 @@ public class LogStat {
     }
 
     public Map<String, Long> getMostRequestedResources() {
-        Function<Log, String> mapper = log -> Path.of(log.request()).getFileName().toString();
-        return getMostFrequentStat(mapper, RESOURCE_REGEX);
+        Function<Log, String> mapper = log -> {
+            String request = getFirstRegexGroup(log.request(), RESOURCE_REGEX);
+            return request != null ? Path.of(request).getFileName().toString() : null;
+        };
+        return getMostFrequentStat(mapper);
     }
 
     public Map<Integer, Long> getMostReturnedStatuses() {
@@ -77,7 +80,8 @@ public class LogStat {
     }
 
     public Map<String, Long> getMostFrequentAgents() {
-        return getMostFrequentStat(Log::httpUserAgent, AGENT_REGEX);
+        Function<Log, String> mapper = log -> getFirstRegexGroup(log.httpUserAgent(), AGENT_REGEX);
+        return getMostFrequentStat(mapper);
     }
 
     public Map<String, Long> getMostRequestedResourcesWithServerError() {
@@ -95,12 +99,10 @@ public class LogStat {
         return matcher.group(1);
     }
 
-    private Map<String, Long> getMostFrequentStat(Function<Log, String> mapper, Pattern pattern) {
+    private Map<String, Long> getMostFrequentStat(Function<Log, String> mapper) {
         Map<String, Long> requestCount = logs.stream()
             .map(mapper)
-            .map(request -> getFirstRegexGroup(request, pattern))
             .filter(Objects::nonNull)
-            .map(request -> Path.of(request).getFileName().toString())
             .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
 
         return requestCount.entrySet().stream()
