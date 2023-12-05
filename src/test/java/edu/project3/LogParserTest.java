@@ -19,7 +19,7 @@ class LogParserTest {
         String log =
             "93.180.71.3 - - [17/May/2015:08:05:32 +0000] \"GET /downloads/product_1 HTTP/1.1\" 304 0 \"-\" \"Debian APT-HTTP/1.3 (0.8.16~exp12ubuntu10.21)\"";
 
-        Log result = LogParser.parseString(log);
+        Log result = LogParser.getLogFromString(log);
         Log expected = new Log(
             InetAddress.getByName("93.180.71.3"),
             " ",
@@ -42,7 +42,7 @@ class LogParserTest {
         "ab.180.71.3 - - [17/Ma/2015:08:05:32 +0000] \"GET /downloads/product_1 HTTP/1.1\" 304 0 \"-\" \"Debian APT-HTTP/1.3 (0.8.16~exp12ubuntu10.21)\""})
     @DisplayName("Парсинг невалидной строки")
     void parseString_shouldReturnNullForNotValidString(String log) {
-        Log result = LogParser.parseString(log);
+        Log result = LogParser.getLogFromString(log);
 
         assertThat(result)
             .isNull();
@@ -55,7 +55,7 @@ class LogParserTest {
             "93.180.71.3 - - [17/May/2015:08:05:32 +0000] \"GET /downloads/product_1 HTTP/1.1\" 304 0 \"-\" \"Debian APT-HTTP/1.3 (0.8.16~exp12ubuntu10.21)\"",
             "217.168.17.5 - - [17/May/2015:08:05:12 +0000] \"GET /downloads/product_2 HTTP/1.1\" 200 3316 \"-\" \"-\""
         );
-        List<Log> result = LogParser.parseStringList(log);
+        List<Log> result = LogParser.getLogsFromStrings(log);
         Log expected1 = new Log(
             InetAddress.getByName("93.180.71.3"),
             " ",
@@ -90,7 +90,7 @@ class LogParserTest {
             "217.168.17.5 - - [17/May/2015:08:05:12 +0000] \"GET /downloads/product_2 HTTP/1.1\" 200 3316 \"-\" \"-\"",
             "217.168.17.5 - - [17/May/2015:08:05:25 +0000] \"GET /downloads/product_1 HTTP/1.1\" 200 3301 \"-\" \"-\""
         );
-        List<Log> result = LogParser.filterLogsForDate(LogParser.parseStringList(log),
+        List<Log> result = LogParser.filterLogsForDate(LogParser.getLogsFromStrings(log),
             LocalDateTime.of(2015, 5, 17, 8, 5, 12),
             LocalDateTime.of(2015, 5, 17, 8, 5, 32)
         );

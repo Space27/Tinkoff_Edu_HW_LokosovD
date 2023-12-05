@@ -14,6 +14,8 @@ import java.util.stream.Collectors;
 public class LogStat {
 
     private final List<Log> logs;
+    private static final Pattern RESOURCE_REGEX = Pattern.compile("\\w+ ([\\w/\\\\]+) .+");
+    private static final Pattern AGENT_REGEX = Pattern.compile(".*\\((.+)\\)");
 
     public enum ResponseCodes {
         NOT_FOUND(404, "Not Found"),
@@ -48,33 +50,16 @@ public class LogStat {
     }
 
     public Map<String, Long> getMostRequestedResources() {
-        Pattern pattern = Pattern.compile("\\w+ ([\\w/\\\\]+) .+");
-        return logs.stream()
-            .map(Log::request)
-            .map(request -> {
-                Matcher matcher = pattern.matcher(request);
-                if (!matcher.find()) {
-                    return null;
-                }
-                return Path.of(matcher.group(1)).getFileName().toString();
-            })
-            .filter(Objects::nonNull)
-            .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()))
-            .entrySet().stream()
-            .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
-            .collect(Collectors.toMap(
-                Map.Entry::getKey,
-                Map.Entry::getValue,
-                (a, b) -> a,
-                LinkedHashMap::new
-            ));
+        Function<Log, String> mapper = log -> Path.of(log.request()).getFileName().toString();
+        return getMostFrequentStat(mapper, RESOURCE_REGEX);
     }
 
     public Map<Integer, Long> getMostReturnedStatuses() {
-        return logs.stream()
+        Map<Integer, Long> statusCount = logs.stream()
             .map(Log::status)
-            .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()))
-            .entrySet().stream()
+            .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+
+        return statusCount.entrySet().stream()
             .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
             .collect(Collectors.toMap(
                 Map.Entry::getKey,
@@ -92,26 +77,7 @@ public class LogStat {
     }
 
     public Map<String, Long> getMostFrequentAgents() {
-        Pattern pattern = Pattern.compile(".*\\((.+)\\)");
-        return logs.stream()
-            .map(Log::httpUserAgent)
-            .map(agent -> {
-                Matcher matcher = pattern.matcher(agent);
-                if (!matcher.find()) {
-                    return null;
-                }
-                return matcher.group(1);
-            })
-            .filter(Objects::nonNull)
-            .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()))
-            .entrySet().stream()
-            .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
-            .collect(Collectors.toMap(
-                Map.Entry::getKey,
-                Map.Entry::getValue,
-                (a, b) -> a,
-                LinkedHashMap::new
-            ));
+        return getMostFrequentStat(Log::httpUserAgent, AGENT_REGEX);
     }
 
     public Map<String, Long> getMostRequestedResourcesWithServerError() {
@@ -119,5 +85,31 @@ public class LogStat {
             .filter(log -> log.status() == ResponseCodes.NOT_FOUND.getCode())
             .toList();
         return new LogStat(filteredLogs).getMostRequestedResources();
+    }
+
+    private String getFirstRegexGroup(String text, Pattern pattern) {
+        Matcher matcher = pattern.matcher(text);
+        if (!matcher.find()) {
+            return null;
+        }
+        return matcher.group(1);
+    }
+
+    private Map<String, Long> getMostFrequentStat(Function<Log, String> mapper, Pattern pattern) {
+        Map<String, Long> requestCount = logs.stream()
+            .map(mapper)
+            .map(request -> getFirstRegexGroup(request, pattern))
+            .filter(Objects::nonNull)
+            .map(request -> Path.of(request).getFileName().toString())
+            .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+
+        return requestCount.entrySet().stream()
+            .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
+            .collect(Collectors.toMap(
+                Map.Entry::getKey,
+                Map.Entry::getValue,
+                (a, b) -> a,
+                LinkedHashMap::new
+            ));
     }
 }

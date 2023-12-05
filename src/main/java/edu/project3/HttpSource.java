@@ -8,27 +8,31 @@ import java.net.http.HttpResponse;
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import static java.net.http.HttpClient.newHttpClient;
 
 public class HttpSource implements LogSource {
 
     private final URI uri;
     private static final int SECONDS_TO_WAIT = 5;
+    private static final Logger LOGGER = LogManager.getLogger();
 
     public HttpSource(URI uri) {
         this.uri = uri;
     }
 
     @Override
-    public List<String> getStringList() {
+    public List<String> readStringsFromSource() {
         try {
-            return getStringFromURI(uri).lines().toList();
+            return readStringFromHTTPClient(uri).lines().toList();
         } catch (IOException | InterruptedException e) {
+            LOGGER.error(e);
             return List.of();
         }
     }
 
-    private static String getStringFromURI(URI uri) throws InterruptedException, IOException {
+    private static String readStringFromHTTPClient(URI uri) throws InterruptedException, IOException {
         HttpRequest request = HttpRequest.newBuilder()
             .uri(uri)
             .GET()

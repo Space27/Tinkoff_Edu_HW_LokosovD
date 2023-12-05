@@ -11,7 +11,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class LogStatTest {
 
     private final List<Log> logs =
-        LogParser.parseStringList(new FileSource(Path.of("src/test/java/edu/project3/stat.log")).getStringList());
+        LogParser.getLogsFromStrings(new FileSource(Path.of("src/test/java/edu/project3/stat.log")).readStringsFromSource());
     private final LogStat stat = new LogStat(logs);
 
     @Test

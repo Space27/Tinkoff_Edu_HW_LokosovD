@@ -1,8 +1,7 @@
 package edu.project3;
 
-import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -13,6 +12,7 @@ import org.apache.logging.log4j.core.tools.picocli.CommandLine;
 
 @CommandLine.Command(name = "nginx log stats",
                      description = "prints nginx log stats")
+@SuppressWarnings({"checkstyle:MultipleStringLiterals", "checkstyle:RegexpSinglelineJava"})
 public final class LogAnalyzer implements Runnable {
 
     private LogAnalyzer() {
@@ -33,7 +33,6 @@ public final class LogAnalyzer implements Runnable {
     @CommandLine.Option(names = {"-f", "--format"}, description = "Output format (markdown or adoc)")
     private Format format;
 
-    @SuppressWarnings("checkstyle:MultipleStringLiterals")
     private enum MetricKeys {
         RESOURCE("Ресурс(ы)"),
         START_DATE("Начальная дата"),
@@ -48,7 +47,7 @@ public final class LogAnalyzer implements Runnable {
         private final String value;
     }
 
-    private Map<String, String> generalMetric = new LinkedHashMap<>() {
+    private final Map<String, String> generalMetric = new LinkedHashMap<>() {
         {
             put(MetricKeys.RESOURCE.value, "-");
             put(MetricKeys.START_DATE.value, "-");
@@ -70,7 +69,6 @@ public final class LogAnalyzer implements Runnable {
         CommandLine.run(new LogAnalyzer(), System.err, args);
     }
 
-    @SuppressWarnings({"checkstyle:MultipleStringLiterals", "checkstyle:RegexpSinglelineJava"})
     @Override
     public void run() {
         LocalDateTime startDate = LocalDateTime.MIN;
@@ -88,19 +86,29 @@ public final class LogAnalyzer implements Runnable {
         List<Log> logList = new ArrayList<>();
         for (String i : path) {
             try {
-                logList.addAll(LogParser.parseStringList(new HttpSource(new URL(i).toURI()).getStringList()));
-            } catch (URISyntaxException | MalformedURLException e) {
-                logList.addAll(LogParser.parseStringList(new FileSource(Path.of(i)).getStringList()));
+                logList.addAll(LogParser.getLogsFromStrings(new HttpSource(new URI(i)).readStringsFromSource()));
+            } catch (URISyntaxException e) {
+                logList.addAll(LogParser.getLogsFromStrings(new FileSource(Path.of(i)).readStringsFromSource()));
             }
         }
         generalMetric.put(MetricKeys.RESOURCE.value, String.join(", ", path));
 
         logList = LogParser.filterLogsForDate(logList, startDate, endDate);
         LogStat logStat = new LogStat(logList);
-        StatPrinter statPrinter = new StatPrinter(format);
 
         generalMetric.put(MetricKeys.REQUEST_COUNT.value, String.valueOf(logStat.getRequestCount()));
         generalMetric.put(MetricKeys.AVG_REQUEST_SIZE.value, String.valueOf(logStat.getAvgServerAnswer()));
+
+        StatPrinter statPrinter = new StatPrinter(format);
+
+        printGeneralMetric(statPrinter);
+        printMostRequestedResources(statPrinter, logStat.getMostRequestedResources());
+        printMostFrequentAgents(statPrinter, logStat.getMostFrequentAgents());
+        printMostReturnedStatuses(statPrinter, logStat.getMostReturnedStatuses());
+        printMostRequestedResourcesWithServerError(statPrinter, logStat.getMostRequestedResourcesWithServerError());
+    }
+
+    private void printGeneralMetric(StatPrinter statPrinter) {
         System.out.println(statPrinter.printSortedMapFirstKElements(
             generalMetric,
             generalMetric.size(),
@@ -108,37 +116,45 @@ public final class LogAnalyzer implements Runnable {
             "Метрика",
             "Значение"
         ));
+    }
 
+    private void printMostRequestedResources(StatPrinter statPrinter, Map<String, Long> resources) {
         System.out.println(statPrinter.printSortedMapFirstKElements(
-            logStat.getMostRequestedResources(),
+            resources,
             TOP_COUNT,
             "Запрашиваемые ресурсы",
             "Ресурс",
             "Количество"
         ));
+    }
 
+    private void printMostFrequentAgents(StatPrinter statPrinter, Map<String, Long> agents) {
+        System.out.println(statPrinter.printSortedMapFirstKElements(
+            agents,
+            TOP_COUNT,
+            "Агенты",
+            "Агент",
+            "Количество"
+        ));
+    }
+
+    private void printMostReturnedStatuses(StatPrinter statPrinter, Map<Integer, ?> statuses) {
         System.out.println(statPrinter.printServerCodes(
-            logStat.getMostReturnedStatuses(),
+            statuses,
             TOP_COUNT,
             "Коды ответа",
             "Код",
             "Имя",
             "Количество"
         ));
+    }
 
+    private void printMostRequestedResourcesWithServerError(StatPrinter statPrinter, Map<String, Long> statuses) {
         System.out.println(statPrinter.printSortedMapFirstKElements(
-            logStat.getMostRequestedResourcesWithServerError(),
+            statuses,
             TOP_COUNT,
             "Ресурсы, доступ к которым закончился ошибкой 404",
             "Ресурс",
-            "Количество"
-        ));
-
-        System.out.println(statPrinter.printSortedMapFirstKElements(
-            logStat.getMostFrequentAgents(),
-            TOP_COUNT,
-            "Агенты",
-            "Агент",
             "Количество"
         ));
     }

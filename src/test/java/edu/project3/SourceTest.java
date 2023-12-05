@@ -15,7 +15,7 @@ class SourceTest {
     void fileSource_shouldReadAllLogsInFile() {
         Path path = Path.of("src/test/java/edu/project3/logs.log");
 
-        List<String> result = new FileSource(path).getStringList();
+        List<String> result = new FileSource(path).readStringsFromSource();
 
         assertThat(result)
             .hasSize(442)
@@ -30,7 +30,7 @@ class SourceTest {
     void fileSource_shouldReturnEmptyListForNotExistingFile() {
         Path path = Path.of("src/test/java/edu/project3/logs.lo");
 
-        List<String> result = new FileSource(path).getStringList();
+        List<String> result = new FileSource(path).readStringsFromSource();
 
         assertThat(result)
             .isEmpty();
@@ -41,7 +41,7 @@ class SourceTest {
     void httpSource_shouldReadAllLogsInWeb() throws URISyntaxException {
         URI path = new URI("https://raw.githubusercontent.com/elastic/examples/master/Common%20Data%20Formats/nginx_logs/nginx_logs");
 
-        List<String> result = new HttpSource(path).getStringList();
+        List<String> result = new HttpSource(path).readStringsFromSource();
 
         assertThat(result)
             .isNotEmpty()
@@ -56,7 +56,7 @@ class SourceTest {
     void httpSource_shouldReturnEmptyListForNotExistingWeb() throws URISyntaxException {
         URI path = new URI("https://raw.githubusercontnt.com/elastic/examples/master/Common%20Data%20Formats/nginx_logs/nginx_logs");
 
-        List<String> result = new HttpSource(path).getStringList();
+        List<String> result = new HttpSource(path).readStringsFromSource();
 
         assertThat(result)
             .isEmpty();
