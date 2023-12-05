@@ -1,5 +1,6 @@
 package edu.project4;
 
+import edu.project4.Transformations.ColorTransformation;
 import edu.project4.Transformations.Transformation;
 import java.security.SecureRandom;
 import java.util.List;
@@ -16,16 +17,14 @@ public class OneThreadRenderer implements Renderer {
     public Image render(
         Image canvas,
         Area world,
-        List<Map.Entry<Transformation, Color>> transformations,
+        List<Map.Entry<Transformation, ColorTransformation>> transformations,
         List<Transformation> variations,
         int samples,
         short iterPerSample
     ) {
         for (int num = 0; num < samples; ++num) {
-            Point pw = new Point(
-                RANDOM.nextDouble(world.x(), world.x() + world.width()),
-                RANDOM.nextDouble(world.y(), world.y() + world.height())
-            );
+            Point pw =
+                new Point(RANDOM.nextDouble(world.x(), world.xMax()), RANDOM.nextDouble(world.y(), world.yMax()));
 
             for (short step = -MIN_STEPS; step < iterPerSample; ++step) {
                 int linIndex = RANDOM.nextInt(0, transformations.size());
@@ -35,9 +34,10 @@ public class OneThreadRenderer implements Renderer {
                 pw = variations.get(nonLinIndex).apply(pw);
 
                 if (step > 0) {
-                    double theta2 = 0.0;
-                    for (int s = 0; s < SYMMETRY; theta2 += Math.PI * 2 / SYMMETRY, ++s) {
-                        var pwr = rotate(pw, theta2);
+                    double theta = 0.0;
+                    for (int s = 0; s < SYMMETRY; ++s) {
+                        theta += Math.PI * 2 / SYMMETRY;
+                        var pwr = rotate(pw, theta);
                         if (!world.contains(pwr)) {
                             continue;
                         }
@@ -47,16 +47,7 @@ public class OneThreadRenderer implements Renderer {
                             continue;
                         }
 
-                        if (pixel.getHitCount() == 0) {
-                            pixel.setR(transformations.get(linIndex).getValue().r());
-                            pixel.setG(transformations.get(linIndex).getValue().g());
-                            pixel.setB(transformations.get(linIndex).getValue().b());
-                        } else {
-                            pixel.setR((pixel.getR() + transformations.get(linIndex).getValue().r()) / 2);
-                            pixel.setG((pixel.getG() + transformations.get(linIndex).getValue().g()) / 2);
-                            pixel.setB((pixel.getB() + transformations.get(linIndex).getValue().b()) / 2);
-                        }
-                        pixel.incHitCount();
+                        transformations.get(linIndex).getValue().accept(pixel);
                     }
                 }
             }
@@ -65,17 +56,16 @@ public class OneThreadRenderer implements Renderer {
         return canvas;
     }
 
-    private Point rotate(Point point, double theta) {
+    public static Point rotate(Point point, double theta) {
         double x = point.x() * Math.cos(theta) - point.y() * Math.sin(theta);
         double y = point.x() * Math.sin(theta) + point.y() * Math.cos(theta);
 
         return new Point(x, y);
     }
 
-    private Pixel mapRange(Area world, Point point, Image image) {
-        int x = image.getWidth() - (int) (((world.width() + world.x() - point.x()) / world.width()) * image.getWidth());
-        int y =
-            image.getHeight() - (int) (((world.height() + world.y() - point.y()) / world.height()) * image.getHeight());
+    public static Pixel mapRange(Area world, Point point, Image image) {
+        int x = image.getWidth() - (int) (((world.xMax() - point.x()) / world.width()) * image.getWidth());
+        int y = image.getHeight() - (int) (((world.yMax() - point.y()) / world.height()) * image.getHeight());
 
         return image.getPixel(x, y);
     }

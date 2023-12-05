@@ -12,10 +12,11 @@ public class LogGammaCorrection implements ImageProcessor {
 
         for (int x = 0; x < image.getWidth(); ++x) {
             for (int y = 0; y < image.getHeight(); ++y) {
-                if (image.getPixel(x, y).getHitCount() != 0) {
-                    image.getPixel(x, y).setNormal(log10(image.getPixel(x, y).getHitCount()));
-                    if (image.getPixel(x, y).getNormal() > max) {
-                        max = image.getPixel(x, y).getNormal();
+                Pixel pixel = image.getPixel(x, y);
+                if (pixel.getHitCount() != 0) {
+                    pixel.setNormal(log10(image.getPixel(x, y).getHitCount()));
+                    if (pixel.getNormal() > max) {
+                        max = pixel.getNormal();
                     }
                 }
             }
@@ -23,14 +24,13 @@ public class LogGammaCorrection implements ImageProcessor {
 
         for (int x = 0; x < image.getWidth(); ++x) {
             for (int y = 0; y < image.getHeight(); ++y) {
-                image.getPixel(x, y).setNormal(image.getPixel(x, y).getNormal() / max);
+                Pixel pixel = image.getPixel(x, y);
 
-                image.getPixel(x, y)
-                    .setR((int) (image.getPixel(x, y).getR() * pow(image.getPixel(x, y).getNormal(), 1 / gamma)));
-                image.getPixel(x, y)
-                    .setG((int) (image.getPixel(x, y).getG() * pow(image.getPixel(x, y).getNormal(), 1 / gamma)));
-                image.getPixel(x, y)
-                    .setB((int) (image.getPixel(x, y).getB() * pow(image.getPixel(x, y).getNormal(), 1 / gamma)));
+                pixel.setNormal(image.getPixel(x, y).getNormal() / max);
+
+                pixel.setR((int) (pixel.getR() * pow(pixel.getNormal(), 1 / gamma)));
+                pixel.setG((int) (pixel.getG() * pow(pixel.getNormal(), 1 / gamma)));
+                pixel.setB((int) (pixel.getB() * pow(pixel.getNormal(), 1 / gamma)));
             }
         }
     }

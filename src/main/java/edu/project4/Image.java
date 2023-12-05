@@ -7,6 +7,9 @@ public class Image {
     private final int height;
 
     public Image(int width, int height) {
+        if (width <= 0 || height <= 0) {
+            throw new IllegalArgumentException("Weight and Height should be positive");
+        }
         this.width = width;
         this.height = height;
 
@@ -18,7 +21,7 @@ public class Image {
 
     public Pixel getPixel(int x, int y) {
         if (contains(x, y)) {
-            return data[x * width + y];
+            return data[y * width + x];
         } else {
             return null;
         }

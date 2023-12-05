@@ -13,14 +13,14 @@ public final class ImageUtils {
     private ImageUtils() {
     }
 
-    public void save(Image image, Path filename, ImageFormat format) {
+    public static void save(Image image, Path filename, ImageFormat format) {
         try {
-            ImageIO.write(imgToBufferedImage(image), format.name(), filename.toFile());
+            ImageIO.write(imgToBufferedImage(image), format.name().toUpperCase(), filename.toFile());
         } catch (IOException ignored) {
         }
     }
 
-    private BufferedImage imgToBufferedImage(Image image) {
+    private static BufferedImage imgToBufferedImage(Image image) {
         BufferedImage bi = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_INT_RGB);
 
         for (int i = 0; i < image.getHeight(); i++) {
