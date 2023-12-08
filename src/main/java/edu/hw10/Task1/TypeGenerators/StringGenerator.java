@@ -1,6 +1,6 @@
-package edu.hw10.TypeGenerators;
+package edu.hw10.Task1.TypeGenerators;
 
-import edu.hw10.Annotations.NotNull;
+import edu.hw10.Task1.Annotations.NotNull;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Parameter;
 import java.security.SecureRandom;

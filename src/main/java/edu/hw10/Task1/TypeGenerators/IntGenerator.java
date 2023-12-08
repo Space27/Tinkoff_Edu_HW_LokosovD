@@ -1,7 +1,7 @@
-package edu.hw10.TypeGenerators;
+package edu.hw10.Task1.TypeGenerators;
 
-import edu.hw10.Annotations.Max;
-import edu.hw10.Annotations.Min;
+import edu.hw10.Task1.Annotations.Max;
+import edu.hw10.Task1.Annotations.Min;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Parameter;
 import java.security.SecureRandom;

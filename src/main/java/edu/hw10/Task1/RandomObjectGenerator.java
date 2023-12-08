@@ -1,8 +1,8 @@
-package edu.hw10;
+package edu.hw10.Task1;
 
-import edu.hw10.TypeGenerators.IntGenerator;
-import edu.hw10.TypeGenerators.StringGenerator;
-import edu.hw10.TypeGenerators.TypeGenerator;
+import edu.hw10.Task1.TypeGenerators.IntGenerator;
+import edu.hw10.Task1.TypeGenerators.StringGenerator;
+import edu.hw10.Task1.TypeGenerators.TypeGenerator;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;

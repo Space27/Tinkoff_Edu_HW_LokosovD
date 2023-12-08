@@ -1,4 +1,4 @@
-package edu.hw10.TypeGenerators;
+package edu.hw10.Task1.TypeGenerators;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -18,10 +18,10 @@ public abstract class TypeGenerator {
     }
 
     public void setNextByList(List<TypeGenerator> nextGenerators) {
-        this.next = nextGenerators.get(0);
+        this.next = nextGenerators.getFirst();
 
         if (nextGenerators.size() > 1) {
-            nextGenerators.get(0).setNextByList(nextGenerators.subList(1, nextGenerators.size()));
+            nextGenerators.getFirst().setNextByList(nextGenerators.subList(1, nextGenerators.size()));
         }
     }
 
