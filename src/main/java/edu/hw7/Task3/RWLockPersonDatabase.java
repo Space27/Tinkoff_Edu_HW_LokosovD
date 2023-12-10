@@ -9,7 +9,6 @@ import org.jetbrains.annotations.Nullable;
 public class RWLockPersonDatabase implements PersonDatabase {
 
     private static final ReadWriteLock LOCK = new ReentrantReadWriteLock();
-    private static final int SLEEP_DURATION = 5;
     private final Set<Person> database;
 
     public RWLockPersonDatabase() {
@@ -21,9 +20,6 @@ public class RWLockPersonDatabase implements PersonDatabase {
         try {
             LOCK.writeLock().lock();
             database.add(person);
-            Thread.sleep(SLEEP_DURATION);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
         } finally {
             LOCK.writeLock().unlock();
         }
@@ -34,9 +30,6 @@ public class RWLockPersonDatabase implements PersonDatabase {
         try {
             LOCK.writeLock().lock();
             database.removeIf(person -> person.id() == id);
-            Thread.sleep(SLEEP_DURATION);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
         } finally {
             LOCK.writeLock().unlock();
         }

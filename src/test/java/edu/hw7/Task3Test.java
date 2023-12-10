@@ -20,7 +20,7 @@ class Task3Test {
     );
 
     @Test
-    @DisplayName("Тест добавления в однопотоке")
+    @DisplayName("Тест добавления в однопотоке с выполнением условия")
     void add_shouldAddNewElements() {
         PersonDatabase personDatabase = new SynchronizedPersonDatabase();
 
@@ -54,7 +54,7 @@ class Task3Test {
     }
 
     @Test
-    @DisplayName("Тест добавления в многопотоке")
+    @DisplayName("Тест добавления в многопотоке с выполнением условия")
     void add_shouldAddNewElementsInParallel() {
         PersonDatabase personDatabase = new SynchronizedPersonDatabase();
         Thread leftThread = new Thread(() -> {
@@ -150,7 +150,7 @@ class Task3Test {
     }
 
     @Test
-    @DisplayName("Поиск в многопотоке")
+    @DisplayName("Поиск в многопотоке с выполнением условия")
     void find_shouldReturnSameResultAsOtherFinds() {
         PersonDatabase personDatabase = new SynchronizedPersonDatabase();
         Thread thread1 = new Thread(() -> {
@@ -192,7 +192,7 @@ class Task3Test {
     }
 
     @Test
-    @DisplayName("Поиск с добавлением в многопотоке")
+    @DisplayName("Поиск с добавлением в многопотоке с выполнением условия")
     void add_shouldWorkWithFindInParallel() {
         PersonDatabase personDatabase = new SynchronizedPersonDatabase();
         Thread thread1 = new Thread(() -> {

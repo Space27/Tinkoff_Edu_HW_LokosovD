@@ -13,8 +13,8 @@ public final class Task4 {
     private static final double CIRCLE_CENTER = 0.5;
     private static final double CIRCLE_RAD_SQUARE = 0.25;
     private static final double K = 4.;
-    private static final int THREAD_COUNT = 6;
-    private static final int TEST_COUNT = 10;
+    private static final int THREAD_COUNT = Runtime.getRuntime().availableProcessors() - 2;
+    private static final int ITERATIONS_COUNT = 10;
 
     public static double calculatePi(long iterations) {
         final ThreadLocalRandom RANDOM = ThreadLocalRandom.current();
@@ -73,7 +73,7 @@ public final class Task4 {
         double result = 0;
         double startPoint;
         double time = 0;
-        for (int i = 0; i < TEST_COUNT; ++i) {
+        for (int i = 0; i < ITERATIONS_COUNT; ++i) {
             startPoint = System.nanoTime();
 
             result += calculatePi(iterations);
@@ -81,14 +81,16 @@ public final class Task4 {
             time += System.nanoTime() - startPoint;
         }
 
-        return new Result(result / TEST_COUNT, Math.abs(result / TEST_COUNT - Math.PI) / Math.PI, time / TEST_COUNT);
+        return new Result(result / ITERATIONS_COUNT, Math.abs(result / ITERATIONS_COUNT - Math.PI) / Math.PI,
+            time / ITERATIONS_COUNT
+        );
     }
 
     public static Result countTheTimeAndErrorParallelPiCalculation(long iterations) {
         double result = 0;
         double startPoint;
         double time = 0;
-        for (int i = 0; i < TEST_COUNT; ++i) {
+        for (int i = 0; i < ITERATIONS_COUNT; ++i) {
             startPoint = System.nanoTime();
 
             result += calculatePiInParallel(iterations);
@@ -96,7 +98,9 @@ public final class Task4 {
             time += System.nanoTime() - startPoint;
         }
 
-        return new Result(result / TEST_COUNT, Math.abs(result / TEST_COUNT - Math.PI) / Math.PI, time / TEST_COUNT);
+        return new Result(result / ITERATIONS_COUNT, Math.abs(result / ITERATIONS_COUNT - Math.PI) / Math.PI,
+            time / ITERATIONS_COUNT
+        );
     }
 
     public record Result(double resPi, double error, double time) {
