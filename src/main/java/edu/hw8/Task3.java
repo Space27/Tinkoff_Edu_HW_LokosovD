@@ -28,7 +28,7 @@ public final class Task3 {
         }
         Map<String, String> hashAndLogin = parseLines(userPasswordList);
         Map<String, String> result = new HashMap<>();
-        String pass = String.valueOf(CHARS.get(0));
+        String pass = String.valueOf(CHARS.getFirst());
 
         while (result.size() != hashAndLogin.size() && pass.length() <= MAX_LEN) {
             String hash = convertPasswordToMD5Hash(pass);
@@ -84,7 +84,7 @@ public final class Task3 {
                     pass = nextPassword(pass);
 
                     if (pass.charAt(0) != i) {
-                        pass = i + String.valueOf(CHARS.get(0))
+                        pass = i + String.valueOf(CHARS.getFirst())
                             .repeat(i == CHARS.getLast() ? pass.length() - 1 : pass.length());
                     }
                 }
@@ -132,13 +132,13 @@ public final class Task3 {
             if (CHARS.contains(string[i]) && string[i] != CHARS.getLast()) {
                 string[i] = CHARS.get(CHARS.indexOf(string[i]) + 1);
                 for (int j = i + 1; j < password.length(); ++j) {
-                    string[j] = CHARS.get(0);
+                    string[j] = CHARS.getFirst();
                 }
                 return String.valueOf(string);
             }
         }
 
-        return String.valueOf(CHARS.get(0)).repeat(password.length() + 1);
+        return String.valueOf(CHARS.getFirst()).repeat(password.length() + 1);
     }
 
     private static List<Character> generateSymbols() {

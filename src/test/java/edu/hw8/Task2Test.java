@@ -7,9 +7,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Vector;
 import java.util.concurrent.atomic.AtomicInteger;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -29,6 +29,7 @@ class Task2Test {
     @DisplayName("Инкрементирование числа c n потоками")
     void pool_shouldIncrementNumberInEveryThreadForNThreads(int n) throws Exception {
         AtomicInteger num = new AtomicInteger(0);
+
         try (ThreadPool threadPool = FixedThreadPool.create(n)) {
             threadPool.start();
             for (int i = 0; i < n; ++i) {
@@ -45,6 +46,7 @@ class Task2Test {
     @DisplayName("Инкрементирование числа c n / 2 потоками")
     void pool_shouldIncrementNumberInEveryThreadForHalfNThreads(int n) throws Exception {
         AtomicInteger num = new AtomicInteger(0);
+
         try (ThreadPool threadPool = FixedThreadPool.create(n / 2)) {
             threadPool.start();
             for (int i = 0; i < n; ++i) {
@@ -60,12 +62,13 @@ class Task2Test {
     @ValueSource(ints = {2, 3, 5, 10, 20, 40})
     @DisplayName("Подсчет чисел фибоначи")
     void pool_shouldCountNFibNumber(int n) throws Exception {
-        List<Long> numbers = new ArrayList<>();
+        List<Long> numbers = new Vector<>();
+
         try (ThreadPool threadPool = FixedThreadPool.create(n / 2)) {
             threadPool.start();
-            for (int i = 0; i < n; ++i) {
+            for (int i = n; i >= 0; --i) {
                 int finalI = i;
-                threadPool.execute(() -> numbers.add(Task2.countNFib(finalI)));
+                threadPool.execute(() -> numbers.add(Task2.fib(finalI)));
             }
         }
         numbers.sort(Comparator.naturalOrder());

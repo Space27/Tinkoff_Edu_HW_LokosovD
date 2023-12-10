@@ -6,8 +6,12 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.List;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class Handler implements Runnable {
+
+    private static final Logger LOGGER = LogManager.getLogger();
     private final Socket socket;
     private static final List<String> QUOTES = List.of(
         "Не переходи на личности там, где их нет",
@@ -29,11 +33,13 @@ public class Handler implements Runnable {
                 .filter(string -> string.contains(message))
                 .findFirst()
                 .orElse(""));
-        } catch (IOException ignored) {
+        } catch (IOException e) {
+            LOGGER.warn(e);
         } finally {
             try {
                 socket.close();
-            } catch (IOException ignored) {
+            } catch (IOException e) {
+                LOGGER.warn(e);
             }
         }
     }
