@@ -30,6 +30,27 @@ public final class Task2 {
         if (Files.isRegularFile(root)) {
             return List.of();
         }
+        try {
+            addTasksAndFindForPredicate(result, tasks, root, filter);
+        } catch (IOException e) {
+            return List.of();
+        }
+
+        result.addAll(ForkJoinTask.invokeAll(tasks).stream()
+            .map(ForkJoinTask::join)
+            .flatMap(Collection::stream)
+            .toList());
+
+        return result;
+    }
+
+    private static void addTasksAndFindForPredicate(
+        List<Path> result,
+        List<RecursiveTask<List<Path>>> tasks,
+        Path root,
+        DirectoryStream.Filter<Path> filter
+    )
+        throws IOException {
         try (DirectoryStream<Path> files = Files.newDirectoryStream(root)) {
             for (Path path : files) {
                 if (Files.isRegularFile(path) && filter.accept(path)) {
@@ -43,15 +64,7 @@ public final class Task2 {
                     });
                 }
             }
-        } catch (IOException e) {
-            return List.of();
         }
-
-        result.addAll(ForkJoinTask.invokeAll(tasks).stream()
-            .map(ForkJoinTask::join)
-            .flatMap(Collection::stream)
-            .toList());
-
-        return result;
     }
+
 }

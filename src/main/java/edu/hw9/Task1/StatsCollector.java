@@ -34,27 +34,31 @@ public class StatsCollector implements AutoCloseable {
                     .boxed()
                     .toList();
 
-                Future<Double> calcSum =
-                    threads.submit(() -> list.parallelStream().mapToDouble(Double::doubleValue).sum());
-                Future<Double> calcMin = threads.submit(() -> list.parallelStream()
-                    .min(Comparator.naturalOrder())
-                    .orElse((double) 0));
-                Future<Double> calcMax = threads.submit(() -> list.parallelStream()
-                    .max(Comparator.naturalOrder())
-                    .orElse((double) 0));
-
-                try {
-                    Double sum = calcSum.get();
-                    Double min = calcMin.get();
-                    Double max = calcMax.get();
-                    stats.add(new StatResult(metricName, sum, sum / (list.isEmpty() ? 1 : list.size()), min, max));
-                } catch (InterruptedException | ExecutionException e) {
-                    throw new RuntimeException(e);
-                }
+                stats.add(calculateMetric(metricName, list));
             });
             tasks.add(task);
         } finally {
             lock.readLock().unlock();
+        }
+    }
+
+    private StatResult calculateMetric(String metricName, List<Double> list) {
+        Future<Double> calcSum =
+            threads.submit(() -> list.parallelStream().mapToDouble(Double::doubleValue).sum());
+        Future<Double> calcMin = threads.submit(() -> list.parallelStream()
+            .min(Comparator.naturalOrder())
+            .orElse((double) 0));
+        Future<Double> calcMax = threads.submit(() -> list.parallelStream()
+            .max(Comparator.naturalOrder())
+            .orElse((double) 0));
+
+        try {
+            Double sum = calcSum.get();
+            Double min = calcMin.get();
+            Double max = calcMax.get();
+            return new StatResult(metricName, sum, sum / (list.isEmpty() ? 1 : list.size()), min, max);
+        } catch (InterruptedException | ExecutionException e) {
+            throw new RuntimeException(e);
         }
     }
 

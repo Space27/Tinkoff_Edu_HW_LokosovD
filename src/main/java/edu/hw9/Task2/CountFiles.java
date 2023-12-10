@@ -27,6 +27,21 @@ public class CountFiles extends RecursiveTask<CountFiles.DirStat> {
         if (Files.isRegularFile(directory)) {
             return new DirStat(List.of(), filesCount);
         }
+
+        try {
+            filesCount += countRegularFilesAndAddTasks();
+        } catch (IOException e) {
+            return new DirStat(List.of(), filesCount);
+        }
+
+        DirStat result = completeTasksAndCountFiles(filesCount);
+
+        return new DirStat(result.bigDirectories, result.filesCount);
+    }
+
+    private int countRegularFilesAndAddTasks() throws IOException {
+        int filesCount = 0;
+
         try (DirectoryStream<Path> files = Files.newDirectoryStream(directory)) {
             for (Path path : files) {
                 if (Files.isRegularFile(path)) {
@@ -35,11 +50,15 @@ public class CountFiles extends RecursiveTask<CountFiles.DirStat> {
                     tasks.add(new CountFiles(path));
                 }
             }
-        } catch (IOException e) {
-            return new DirStat(List.of(), filesCount);
         }
 
+        return filesCount;
+    }
+
+    private DirStat completeTasksAndCountFiles(int currentFilesCount) {
+        int filesCount = currentFilesCount;
         List<Path> result = new ArrayList<>();
+
         List<DirStat> completedTasks = ForkJoinTask.invokeAll(tasks).stream()
             .map(ForkJoinTask::join)
             .toList();
