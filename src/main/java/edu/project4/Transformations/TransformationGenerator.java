@@ -1,6 +1,23 @@
 package edu.project4.Transformations;
 
 import edu.project4.Point;
+import edu.project4.Transformations.NonLinear.Bubble;
+import edu.project4.Transformations.NonLinear.Collatz;
+import edu.project4.Transformations.NonLinear.Cosine;
+import edu.project4.Transformations.NonLinear.Cross;
+import edu.project4.Transformations.NonLinear.Cylinder;
+import edu.project4.Transformations.NonLinear.Disk;
+import edu.project4.Transformations.NonLinear.Exponential;
+import edu.project4.Transformations.NonLinear.Eyefish;
+import edu.project4.Transformations.NonLinear.Handkerchief;
+import edu.project4.Transformations.NonLinear.Heart;
+import edu.project4.Transformations.NonLinear.Horseshoe;
+import edu.project4.Transformations.NonLinear.Linear;
+import edu.project4.Transformations.NonLinear.Polar;
+import edu.project4.Transformations.NonLinear.Sinusoidal;
+import edu.project4.Transformations.NonLinear.Spiral;
+import edu.project4.Transformations.NonLinear.Swirl;
+import edu.project4.Transformations.NonLinear.Tangent;
 import java.security.SecureRandom;
 import java.util.AbstractMap;
 import java.util.ArrayList;
@@ -18,87 +35,24 @@ public final class TransformationGenerator {
     private static final int MIN_COLOR = 64;
     private static final int MAX_COLOR = 256;
     private static final Random RANDOM = new SecureRandom();
-    @SuppressWarnings("checkstyle:MagicNumber")
-    private static final List<Transformation> NON_LINEAR_TRANSFORMATIONS = List.of(
-        point -> point,
-        point -> new Point(Math.sin(point.x()), Math.sin(point.y())),
-        point -> {
-            double r = point.x() * point.x() + point.y() * point.y();
-            double newX = point.x() * Math.sin(r) - point.y() * Math.cos(r);
-            double newY = point.x() * Math.cos(r) + point.y() * Math.sin(r);
-            return new Point(newX, newY);
-        },
-        point -> {
-            double r = 1.0 / Math.sqrt(point.x() * point.x() + point.y() * point.y());
-            double newX = r * (point.x() - point.y()) * (point.x() + point.y());
-            double newY = r * 2.0 * point.x() * point.y();
-            return new Point(newX, newY);
-        },
-        point -> {
-            double newX = Math.atan2(point.y(), point.x()) / Math.PI;
-            double newY = Math.sqrt(point.x() * point.x() + point.y() * point.y()) - 1.0;
-            return new Point(newX, newY);
-        },
-        point -> {
-            double r = Math.sqrt(point.x() * point.x() + point.y() * point.y());
-            double theta = Math.atan2(point.y(), point.x());
-            double newX = r * Math.sin(theta + r);
-            double newY = r * Math.cos(theta - r);
-            return new Point(newX, newY);
-        },
-        point -> {
-            double r = Math.sqrt(point.x() * point.x() + point.y() * point.y());
-            double theta = Math.atan2(point.y(), point.x());
-            double newX = r * Math.sin(theta * r);
-            double newY = -r * Math.cos(theta * r);
-            return new Point(newX, newY);
-        },
-        point -> {
-            double r = Math.sqrt(point.x() * point.x() + point.y() * point.y()) * Math.PI;
-            double theta = Math.atan2(point.y(), point.x()) / Math.PI;
-            double newX = theta * Math.sin(r);
-            double newY = theta * Math.cos(r);
-            return new Point(newX, newY);
-        },
-        point -> {
-            double newX = .25 * (1.0 + 4.0 * point.x() - (1.0 + 2.0 * point.x()) * Math.cos(Math.PI * point.x()));
-            double newY = .25 * (1.0 + 4.0 * point.y() - (1.0 + 2.0 * point.y()) * Math.cos(Math.PI * point.y()));
-            return new Point(newX, newY);
-        },
-        point -> {
-            double r = Math.sqrt(1.0 / ((point.x() * point.x() - point.y() * point.y())
-                * (point.x() * point.x() - point.y() * point.y())));
-            return new Point(point.x() * r, point.y() * r);
-        },
-        point -> new Point(Math.sin(point.x()) / Math.cos(point.y()), Math.tan(point.y())),
-        point -> new Point(Math.sin(point.x()), point.y()),
-        point -> {
-            double r = 4 + point.x() * point.x() + point.y() * point.y();
-            double newX = (4.0 * point.x()) / r;
-            double newY = (4.0 * point.y()) / r;
-            return new Point(newX, newY);
-        },
-        point -> {
-            double r = 2.0 / (1. + Math.sqrt(point.x() * point.x() + point.y() * point.y()));
-            return new Point(r * point.x(), r * point.y());
-        },
-        point -> {
-            double newX = Math.cos(Math.PI * point.x()) * Math.cosh(point.y());
-            double newY = -Math.sin(Math.PI * point.x()) * Math.sinh(point.y());
-            return new Point(newX, newY);
-        },
-        point -> {
-            double newX = Math.exp(point.x() - 1.0) * Math.cos(Math.PI * point.y());
-            double newY = Math.exp(point.x() - 1.0) * Math.sin(Math.PI * point.y());
-            return new Point(newX, newY);
-        },
-        point -> {
-            double r = Math.sqrt(point.x() * point.x() + point.y() * point.y());
-            double theta = Math.atan2(point.y(), point.x());
-            double newX = (1.0 / r) * (Math.cos(theta) + Math.sin(r));
-            double newY = (1.0 / r) * (Math.sin(theta) - Math.cos(r));
-            return new Point(newX, newY);
-        }
+    public static final List<Transformation> NON_LINEAR_TRANSFORMATIONS = List.of(
+        new Linear(),
+        new Sinusoidal(),
+        new Swirl(),
+        new Horseshoe(),
+        new Polar(),
+        new Handkerchief(),
+        new Heart(),
+        new Disk(),
+        new Collatz(),
+        new Cross(),
+        new Tangent(),
+        new Cylinder(),
+        new Bubble(),
+        new Eyefish(),
+        new Cosine(),
+        new Exponential(),
+        new Spiral()
     );
 
     public static List<Map.Entry<Transformation, ColorTransformation>> generateLinTransformationsWithColor(int count) {
@@ -133,7 +87,7 @@ public final class TransformationGenerator {
         return result;
     }
 
-    private static Transformation getLinearTransformation() {
+    public static Transformation getLinearTransformation() {
         double a;
         double b;
         double e;

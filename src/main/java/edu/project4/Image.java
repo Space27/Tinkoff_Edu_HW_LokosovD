@@ -1,5 +1,7 @@
 package edu.project4;
 
+import java.util.Arrays;
+
 public class Image {
 
     private final Pixel[] data;
@@ -16,6 +18,21 @@ public class Image {
         data = new Pixel[width * height];
         for (int i = 0; i < data.length; ++i) {
             data[i] = new Pixel();
+        }
+    }
+
+    public Image(Image obj) {
+        this.width = obj.getWidth();
+        this.height = obj.getHeight();
+
+        data = new Pixel[width * height];
+        for (int i = 0; i < width; ++i) {
+            for (int j = 0; j < height; ++j) {
+                data[j * width + i] = new Pixel(obj.getPixel(i, j).getColor(),
+                    obj.getPixel(i, j).getHitCount(),
+                    obj.getPixel(i, j).getNormal()
+                );
+            }
         }
     }
 
@@ -37,5 +54,31 @@ public class Image {
 
     public int getHeight() {
         return height;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+
+        Image image = (Image) obj;
+
+        return Arrays.equals(image.data, this.data) && image.height == height && image.width == width;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = 0;
+
+        for (Pixel pixel : data) {
+            result += (pixel.hashCode() % Integer.MAX_VALUE);
+        }
+
+        return result;
     }
 }

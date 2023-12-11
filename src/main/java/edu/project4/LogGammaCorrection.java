@@ -5,6 +5,8 @@ import static java.lang.StrictMath.pow;
 
 public class LogGammaCorrection implements ImageProcessor {
 
+    private static final int MAX_COLOR = 255;
+
     @Override
     public void process(Image image) {
         double max = 0.0;
@@ -28,9 +30,9 @@ public class LogGammaCorrection implements ImageProcessor {
 
                 pixel.setNormal(image.getPixel(x, y).getNormal() / max);
 
-                pixel.setR((int) (pixel.getR() * pow(pixel.getNormal(), 1 / gamma)));
-                pixel.setG((int) (pixel.getG() * pow(pixel.getNormal(), 1 / gamma)));
-                pixel.setB((int) (pixel.getB() * pow(pixel.getNormal(), 1 / gamma)));
+                pixel.setR((int) (pixel.getR() * pow(pixel.getNormal(), 1 / gamma)) % MAX_COLOR);
+                pixel.setG((int) (pixel.getG() * pow(pixel.getNormal(), 1 / gamma)) % MAX_COLOR);
+                pixel.setB((int) (pixel.getB() * pow(pixel.getNormal(), 1 / gamma)) % MAX_COLOR);
             }
         }
     }

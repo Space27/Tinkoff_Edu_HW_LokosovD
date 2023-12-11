@@ -7,9 +7,6 @@ import javax.imageio.ImageIO;
 
 public final class ImageUtils {
 
-    private static final int BIG_SHIFT = 16;
-    private static final int MED_SHIFT = 8;
-
     private ImageUtils() {
     }
 
@@ -26,7 +23,7 @@ public final class ImageUtils {
         for (int i = 0; i < image.getHeight(); i++) {
             for (int j = 0; j < image.getWidth(); j++) {
                 Pixel pixel = image.getPixel(j, i);
-                bi.setRGB(j, i, (pixel.getR() << BIG_SHIFT) + (pixel.getG() << MED_SHIFT) + pixel.getB());
+                bi.setRGB(j, i, pixel.getColor().getColorByOneNum());
             }
         }
 

@@ -9,9 +9,19 @@ import java.util.Random;
 
 public class OneThreadRenderer implements Renderer {
 
-    private static final Random RANDOM = new SecureRandom();
+    private final Random random;
+    private final int symmetry;
     private static final int MIN_STEPS = 20;
-    private static final int SYMMETRY = 1;
+    private static final double ACCURACY = Math.pow(10, 10);
+
+    public OneThreadRenderer(Random random, int symmetry) {
+        this.random = random;
+        this.symmetry = symmetry;
+    }
+
+    public OneThreadRenderer() {
+        this(new SecureRandom(), 1);
+    }
 
     @Override
     public Image render(
@@ -23,32 +33,17 @@ public class OneThreadRenderer implements Renderer {
         short iterPerSample
     ) {
         for (int num = 0; num < samples; ++num) {
-            Point pw =
-                new Point(RANDOM.nextDouble(world.x(), world.xMax()), RANDOM.nextDouble(world.y(), world.yMax()));
+            Point pw = getRandomPointInArea(world);
 
             for (short step = -MIN_STEPS; step < iterPerSample; ++step) {
-                int linIndex = RANDOM.nextInt(0, transformations.size());
-                int nonLinIndex = RANDOM.nextInt(0, variations.size());
+                var linTrans = getRandomElementInList(transformations);
+                var nonLinTrans = getRandomElementInList(variations);
 
-                pw = transformations.get(linIndex).getKey().apply(pw);
-                pw = variations.get(nonLinIndex).apply(pw);
+                pw = linTrans.getKey().apply(pw);
+                pw = nonLinTrans.apply(pw);
 
                 if (step > 0) {
-                    double theta = 0.0;
-                    for (int s = 0; s < SYMMETRY; ++s) {
-                        theta += Math.PI * 2 / SYMMETRY;
-                        var pwr = rotate(pw, theta);
-                        if (!world.contains(pwr)) {
-                            continue;
-                        }
-
-                        Pixel pixel = mapRange(world, pwr, canvas);
-                        if (pixel == null) {
-                            continue;
-                        }
-
-                        transformations.get(linIndex).getValue().accept(pixel);
-                    }
+                    colorSymmetryPixels(canvas, pw, world, linTrans.getValue());
                 }
             }
         }
@@ -56,16 +51,54 @@ public class OneThreadRenderer implements Renderer {
         return canvas;
     }
 
-    public static Point rotate(Point point, double theta) {
-        double x = point.x() * Math.cos(theta) - point.y() * Math.sin(theta);
-        double y = point.x() * Math.sin(theta) + point.y() * Math.cos(theta);
+    public void colorSymmetryPixels(
+        Image canvas,
+        Point point,
+        Area world,
+        ColorTransformation newColor
+    ) {
+        double theta = 0.0;
+
+        for (int s = 0; s < symmetry; ++s) {
+            theta += Math.PI * 2 / symmetry;
+            var pwr = rotate(point, theta);
+            if (!world.contains(pwr)) {
+                continue;
+            }
+
+            Pixel pixel = mapRange(world, pwr, canvas);
+            if (pixel == null) {
+                continue;
+            }
+
+            synchronized (pixel) {
+                newColor.accept(pixel);
+            }
+        }
+    }
+
+    public Point getRandomPointInArea(Area world) {
+        return new Point(random.nextDouble(world.x(), world.xMax()), random.nextDouble(world.y(), world.yMax()));
+    }
+
+    public <T> T getRandomElementInList(List<T> list) {
+        int index = random.nextInt(list.size());
+        return list.get(index);
+    }
+
+    public Point rotate(Point point, double theta) {
+        double x = Math.round((point.x() * Math.cos(theta) - point.y() * Math.sin(theta)) * ACCURACY) / ACCURACY;
+        double y = Math.round((point.x() * Math.sin(theta) + point.y() * Math.cos(theta)) * ACCURACY) / ACCURACY;
 
         return new Point(x, y);
     }
 
-    public static Pixel mapRange(Area world, Point point, Image image) {
+    public Pixel mapRange(Area world, Point point, Image image) {
         int x = image.getWidth() - (int) (((world.xMax() - point.x()) / world.width()) * image.getWidth());
         int y = image.getHeight() - (int) (((world.yMax() - point.y()) / world.height()) * image.getHeight());
+
+        x = x == image.getWidth() ? x - 1 : x;
+        y = y == image.getHeight() ? y - 1 : y;
 
         return image.getPixel(x, y);
     }

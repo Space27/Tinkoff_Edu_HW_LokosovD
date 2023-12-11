@@ -22,6 +22,7 @@ public final class Run {
                 (short) 500
             );
         }
+
         ImageProcessor processor = new LogGammaCorrection();
         processor.process(image);
 

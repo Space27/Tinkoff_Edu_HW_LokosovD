@@ -76,4 +76,26 @@ public class Pixel {
     public void setNormal(double normal) {
         this.normal = normal;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+
+        Pixel pixel = (Pixel) obj;
+
+        return pixel.color.equals(this.color) && pixel.hitCount == this.hitCount;
+    }
+
+    @Override
+    public int hashCode() {
+        final int hitShift = 24;
+
+        return color.getColorByOneNum() + hitCount << hitShift;
+    }
 }

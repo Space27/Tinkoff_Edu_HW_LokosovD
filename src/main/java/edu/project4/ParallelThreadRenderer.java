@@ -14,9 +14,8 @@ import java.util.stream.Stream;
 
 public class ParallelThreadRenderer implements Renderer, AutoCloseable {
 
-    private static final int THREAD_COUNT = 10;
+    private static final int THREAD_COUNT = Runtime.getRuntime().availableProcessors() - 2;
     private final ExecutorService threads;
-    private static final int MIN_STEPS = 20;
     private static final int SYMMETRY = 1;
 
     public ParallelThreadRenderer() {
@@ -33,43 +32,21 @@ public class ParallelThreadRenderer implements Renderer, AutoCloseable {
         short iterPerSample
     ) {
         final int samplesPerThread = samples / THREAD_COUNT;
+
         Callable<Void> task = () -> {
-            final ThreadLocalRandom RANDOM = ThreadLocalRandom.current();
-            for (int num = 0; num < samplesPerThread; ++num) {
-                Point pw =
-                    new Point(RANDOM.nextDouble(world.x(), world.xMax()), RANDOM.nextDouble(world.y(), world.yMax()));
+            Renderer renderer = new OneThreadRenderer(ThreadLocalRandom.current(), SYMMETRY);
 
-                for (short step = -MIN_STEPS; step < iterPerSample; ++step) {
-                    final int linIndex = RANDOM.nextInt(0, transformations.size());
-                    final int nonLinIndex = RANDOM.nextInt(0, variations.size());
+            renderer.render(canvas, world, transformations, variations, samplesPerThread, iterPerSample);
 
-                    pw = transformations.get(linIndex).getKey().apply(pw);
-                    pw = variations.get(nonLinIndex).apply(pw);
-
-                    if (step > 0) {
-                        double theta = 0.0;
-                        for (int s = 0; s < SYMMETRY; ++s) {
-                            theta += Math.PI * 2 / SYMMETRY;
-                            final Point pwr = OneThreadRenderer.rotate(pw, theta);
-                            if (!world.contains(pwr)) {
-                                continue;
-                            }
-
-                            Pixel pixel = OneThreadRenderer.mapRange(world, pwr, canvas);
-                            if (pixel == null) {
-                                continue;
-                            }
-
-                            synchronized (pixel) {
-                                transformations.get(linIndex).getValue().accept(pixel);
-                            }
-                        }
-                    }
-                }
-            }
             return null;
         };
 
+        generateAndCompleteTasks(task);
+
+        return canvas;
+    }
+
+    private void generateAndCompleteTasks(Callable<Void> task) {
         List<Callable<Void>> tasks = Stream.generate(() -> task).limit(THREAD_COUNT).toList();
         try {
             List<Future<Void>> futures = threads.invokeAll(tasks);
@@ -79,7 +56,6 @@ public class ParallelThreadRenderer implements Renderer, AutoCloseable {
         } catch (InterruptedException | ExecutionException e) {
             throw new RuntimeException(e);
         }
-        return canvas;
     }
 
     public void close() {
