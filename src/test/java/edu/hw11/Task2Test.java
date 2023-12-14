@@ -1,5 +1,6 @@
 package edu.hw11;
 
+import edu.hw11.Task2.ArithmeticUtils;
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.description.type.TypeDescription;
 import net.bytebuddy.dynamic.ClassFileLocator;
@@ -17,9 +18,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 class Task2Test {
 
     @BeforeAll
-    public static void init(){
+    public static void init() {
         TypeDescription typeDescription = TypePool.Default.ofSystemLoader()
-            .describe("edu.hw11.ArithmeticUtils")
+            .describe("edu.hw11.Task2.ArithmeticUtils")
             .resolve();
         try (DynamicType.Unloaded<Object> objectUnloaded = new ByteBuddy()
             .redefine(typeDescription, ClassFileLocator.ForClassLoader.ofSystemLoader())

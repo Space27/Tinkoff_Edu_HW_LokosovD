@@ -1,4 +1,4 @@
-package edu.hw11;
+package edu.hw11.Task2;
 
 public final class ArithmeticUtils {
 
