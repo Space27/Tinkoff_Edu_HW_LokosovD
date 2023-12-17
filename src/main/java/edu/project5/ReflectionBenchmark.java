@@ -35,9 +35,9 @@ public class ReflectionBenchmark {
             .forks(1)
             .warmupForks(1)
             .warmupIterations(1)
-            .warmupTime(TimeValue.seconds(10))
+            .warmupTime(TimeValue.seconds(5))
             .measurementIterations(1)
-            .measurementTime(TimeValue.seconds(20))
+            .measurementTime(TimeValue.seconds(5))
             .build();
 
         new Runner(options).run();
