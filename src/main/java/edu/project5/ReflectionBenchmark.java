@@ -35,9 +35,9 @@ public class ReflectionBenchmark {
             .forks(1)
             .warmupForks(1)
             .warmupIterations(1)
-            .warmupTime(TimeValue.seconds(5))
+            .warmupTime(TimeValue.seconds(10))
             .measurementIterations(1)
-            .measurementTime(TimeValue.seconds(5))
+            .measurementTime(TimeValue.seconds(20))
             .build();
 
         new Runner(options).run();
@@ -47,9 +47,10 @@ public class ReflectionBenchmark {
     private Student student;
     private Method method;
     private MethodHandle methodHandle;
-    private MethodHandle lambdaMethod;
+    private Supplier<String> lambda;
 
     @Setup
+    @SuppressWarnings("unchecked")
     public void setup() throws Throwable {
         MethodHandles.Lookup publicLookup = MethodHandles.publicLookup();
         MethodHandles.Lookup lookup = MethodHandles.lookup();
@@ -58,6 +59,7 @@ public class ReflectionBenchmark {
         student = new Student("Daniil", "Lokosov");
 
         method = student.getClass().getMethod(METHOD_NAME);
+
         methodHandle = publicLookup.findVirtual(Student.class, METHOD_NAME, mt);
 
         CallSite callSite = LambdaMetafactory.metafactory(
@@ -68,7 +70,7 @@ public class ReflectionBenchmark {
             methodHandle,
             mt
         );
-        lambdaMethod = callSite.getTarget();
+        lambda = (Supplier<String>) callSite.getTarget().invokeExact(student);
     }
 
     @Benchmark
@@ -90,9 +92,7 @@ public class ReflectionBenchmark {
     }
 
     @Benchmark
-    public void lambdaMetaFactory(Blackhole bh) throws Throwable {
-        @SuppressWarnings("unchecked")
-        Supplier<String> lambda = (Supplier<String>) lambdaMethod.invokeExact(student);
+    public void lambdaMetafactory(Blackhole bh) {
         String name = lambda.get();
         bh.consume(name);
     }
